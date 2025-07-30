@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body>
+    <div class="flex h-screen justify-center items-center">
     <form action="/student" method="post">
-        <input type="text" name="name" placeholder="enter name">
-        <input type="number" name="age" placeholder="enter age">
-        <input type="number" name="className" placeholder="enter class">
-        <button type="submit">Submit</button>
+        <input type="text" name="name" placeholder="enter name" class="border border-black p-3">
+        <input type="number" name="age" placeholder="enter age" class="border border-black p-3">
+        <input type="number" name="className" placeholder="enter class" class="border border-black p-3">
+        <button type="submit" class="border border-black p-3">Submit</button>
     </form>
+    </div>
 </body>
 </html>
