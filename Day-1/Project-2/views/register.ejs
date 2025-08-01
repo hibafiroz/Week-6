@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<label lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    <div class="flex flex-col justify-center items-center h-screen">
+        <form action="/studentList" method="post">
+            <div class="flex flex-col font-bold">
+
+            <label for="name">Name: </label>
+            <input type="text" name="name" class="border border-black p-3" placeholder="Enter Your Name">
+            </div>
+
+           <div class="font-bold flex flex-col">
+             <label for="email">Email: </label>
+            <input type="email" name="email" class="border border-black p-3" placeholder="Enter Your Email">
+            </div>
+
+           <div class="font-bold flex flex-col">
+             <label for="number">Phone: </label>
+            <input type="number" name="number" class="border border-black p-3" placeholder="Enter Phone Number">
+            </div>
+
+            <div class="font-bold flex flex-col"> 
+                <label for="course">Course: </label>
+                <label><input type="radio" name="course" value="Web Development Bootcamp" class="border border-black p-3">Web Development Bootcamp</label>
+                <label><input type="radio" name="course" value="UI/UX Design Essentials" class="border border-black p-3">UI/UX Design Essentials</label>
+                <label><input type="radio" name="course" value="JavaScript Mastery" class="border border-black p-3">JavaScript Mastery</label>
+                <label><input type="radio" name="course" value="Node.js & Express" class="border border-black p-3">Node.js & Express</label>
+                <label><input type="radio" name="course" value="React.js Crash Course" class="border border-black p-3">React.js Crash Course</label>
+                <label><input type="radio" name="course" value="Personal Branding & Soft Skills" class="border border-black p-3">Personal Branding & Soft Skills</label>
+            </div><br>
+
+            <button class="font-bold ml-18 border border-black p-3">Register</button>
+        </form>
+    </div>
+</body>
+</html>

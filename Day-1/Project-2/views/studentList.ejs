@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h1>Registered Student Details</h1>
+           <ul> <%students.forEach((val)=>{%>
+                <li>ID: <%=val.id%></li><br>
+                <li>Name: <%=val.name%></li><br>
+                <li>Email: <%=val.email%></li><br>
+                <li>Phone: <%=val.number%></li>
+            <%})%>
+            </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Header -->
+  <!-- <header class="bg-gray-800 text-white py-4 shadow-md">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">Admin Dashboard</h1>
+      <a href="/logout" class="text-sm hover:underline">Logout</a>
+    </div>
+  </header> -->
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+      <!-- Card 1 -->
+      <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
+        <h2 class="text-lg font-semibold mb-2">View All Students</h2>
+        <p class="text-sm text-gray-600 mb-4">List and manage registered students.</p>
+        <a href="/studentList" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">View</a>
+      </div>
+
+      <!-- Card 2 -->
+      <!-- <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
+        <h2 class="text-lg font-semibold mb-2">Add New Course</h2>
+        <p class="text-sm text-gray-600 mb-4">Create a new course for students.</p>
+        <a href="/admin/add-course" class="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Add</a>
+      </div>
+
+        <--Card 3 -->
+      <!-- <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
+        <h2 class="text-lg font-semibold mb-2">Manage Enrollments</h2>
+        <p class="text-sm text-gray-600 mb-4">Track who joined which course.</p>
+        <a href="/admin/enrollments" class="inline-block bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Manage</a>
+      </div> -->
+
+    </div>
+  </main>
+
+</body>
+</html>
