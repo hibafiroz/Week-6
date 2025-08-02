@@ -8,13 +8,18 @@
 <body>
     <div>
         <h1>Registered Student Details</h1>
-           <ul> <%students.forEach((val)=>{%>
-                <li>ID: <%=val.id%></li><br>
-                <li>Name: <%=val.name%></li><br>
-                <li>Email: <%=val.email%></li><br>
-                <li>Phone: <%=val.number%></li>
+           <ul> 
+            <%students.forEach((val)=>{%>
+                <!-- <li>ID: <%=val.id%></li><br> -->
+            <li>Name: <%=val.name%>
+                Email: <%=val.email%>
+                Phone: <%=val.phone%>
+                Course: <%=val.course%>
+            </li>
+            <br>
             <%})%>
             </ul>
+            <a href="/home">Back to Home Page</a>
     </div>
 </body>
 </html>

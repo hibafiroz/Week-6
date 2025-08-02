@@ -1,9 +1,9 @@
 const express=require('express')
 const router=express.Router()
-const{admin,studentList}=require('../controller/adminController')
+const{admin,studentListGet}=require('../controller/adminController')
 
 router.get('/admin',admin)
 
-router.get('/studentList',studentList)
+router.get('/studentList',studentListGet)
 
 module.exports=router
