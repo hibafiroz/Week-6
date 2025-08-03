@@ -1,21 +1,4 @@
-const students=[{
-    name:'hiba',
-    email:'hiba@gmail.com',
-    phone:1234567890,
-    course:'Node.js & Express'
-},
-{
-    name:'mehrin',
-    email:'mehrin@gmail.com',
-    phone:12789567890,
-    course:'Node.js & Express'
-},
-{
-    name:'marsi',
-    email:'marsi@gmail.com',
-    phone:1234567827,
-    course:'Node.js & Express'
-},]
+const students=require('../data/studentsData')
 //making this array fetching from server in asynchronous way
 // const fetchAllStudents=()=>{
 //     return new Promise((res,rej)=>{

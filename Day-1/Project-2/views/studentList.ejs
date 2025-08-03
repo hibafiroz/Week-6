@@ -11,10 +11,12 @@
            <ul> 
             <%students.forEach((val)=>{%>
                 <!-- <li>ID: <%=val.id%></li><br> -->
-            <li>Name: <%=val.name%>
-                Email: <%=val.email%>
+            <li> <a href="/studentDetail/<%=val.id%>">
+                ID: <%=val.id%>
+                Name: <%=val.name%> 
+                 Email: <%=val.email%>
                 Phone: <%=val.phone%>
-                Course: <%=val.course%>
+                Course: <%=val.course%></a> 
             </li>
             <br>
             <%})%>
