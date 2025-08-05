@@ -17,9 +17,10 @@ const fetchAllStudents = () => {
 const studentList = async (req, res) => {
     try {
         const studentsList = await fetchAllStudents()
-        res.render('student', { studentsList })
+        res.render('studentList', { studentsList })
     } catch (error) {
-        res.status(500).send('Failed to Fetch')
+        next(error)
+        //res.status(500).send('Failed to Fetch')
     }
 }
 
@@ -32,7 +33,7 @@ const studentList = async (req, res) => {
 const fetchSingleStudent = (id) => {
     return new Promise((res, rej) => {
         setTimeout(() => {
-            const student = students.find((s) => s.id === id)
+            const student = students.find((s) => s.id === parseInt(id))
             res(student)
         }, 1000)
     })
@@ -48,9 +49,9 @@ const getSingleStudent = async (req, res) => {
         //   throw(err) //can use throw() instead next() but only works if we're inside an async and the error is caught by a try-catch that calls next(err) inside the catch
        }
         // return res.status(404).send('Student not found')
-       // res.render('studentDetail', { student })
- } catch (error) {
-        next(error)  //err passing to middlewaree (let middleware handle the response)
+       res.render('studentDetail', { student })
+ } catch (err) {
+        next(err)  //err passing to middlewaree (let middleware handle the response)
     }
     // if student is not found- throw a NotFoundError and pass it to middleware via next(err)
     // if any other error(like DataBase error) occurs - pass that too using next(err)
@@ -64,7 +65,7 @@ const studentPost = (req, res) => {
     const { name, email, phone, course } = req.body;
     const newStud = { id: students.length + 1, name, email, phone, course }
     students.push(newStud)
-    res.redirect('/studentList')
+    res.redirect('/')
 }
 
 const studentGet = (req, res) => {

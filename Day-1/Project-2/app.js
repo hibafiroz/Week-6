@@ -4,7 +4,7 @@ const path = require('path')
 const adminRoute = require('./routes/admin-Route')
 const studentRoute = require('./routes/student-Route')
 const { title } = require('process')
-const { NotFoundError, BadRequestError } = require('./utils/errors')
+//const { NotFoundError, BadRequestError } = require('./utils/errors')
 const { errorHandlingMiddleware } = require('./middleware/errorHandling')
 
 process.on('uncaughtException',(err)=>{
@@ -18,12 +18,6 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
-app.set('data', path.join(__dirname, 'data'))
-
-
-// import('./controller/moduleType.mjs').then(({welcome})=>{
-//      app.get('/welcome',welcome)
-// })
 
 // (async()=>{
 //     const {welcome}=await import('./controller/moduleType.mjs')
@@ -57,4 +51,4 @@ app.use(errorHandlingMiddleware)
 
 
 
-app.listen(5000, () => { console.log('http://localhost:5000') })
+app.listen(5001, () => { console.log('http://localhost:5001') })

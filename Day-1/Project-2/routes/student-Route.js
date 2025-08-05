@@ -7,5 +7,6 @@ router.get('/student',studentGet)
 router.post('/studentList',studentPost)
 router.get('/studentList',studentList)
 router.get('/course',course)
-router.get('/:id',getSingleStudent)
+router.get('/studentDetail/:id',getSingleStudent)
+
 module.exports=router

@@ -3,7 +3,7 @@
 //inside the middleware we can check the type of error and respond accordingly 
 //for ex sending a custom msg and status code
 
-const { NotFoundError, BadRequestError, AppError } = require("../utils/errors")
+const { AppError } = require("../utils/errors")
 
 const errorHandlingMiddleware=(error, req, res, next) => {
     if (error instanceof AppError) {
@@ -18,6 +18,39 @@ const errorHandlingMiddleware=(error, req, res, next) => {
         title: 'Error',
         status: 500,
         message: 'Internal server error'
+    })
+
+        res.status(400).render('error',{
+        title: 'Error',
+        status: 400,
+        message: 'Unauthorization'
+    })
+
+     res.status(401).render('error',{
+        title: 'Error',
+        status: 401,
+        message: 'Not Found'
+    })
+
+     res.status(200).render('error',{
+        title: 'Error',
+        status: 200,
+        message: 'OK'
+    })
+    res.status(20).render('error',{
+        title: 'Error',
+        status: 201,
+        message: 'OK'
+    })
+    res.status(200).render('error',{
+        title: 'Error',
+        status: 204,
+        message: 'No content'
+    })
+    res.status(403).render('error',{
+        title: 'Error',
+        status: 403,
+        message: 'Forbidden'
     })
 }
 
