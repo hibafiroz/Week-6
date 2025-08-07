@@ -9,8 +9,9 @@
 // Duplex – streams that are both readable and writable (e.g., TCP socket)
 // Transform – duplex streams that can modify data while reading/writing (e.g., compression, encryption)
 
-// Why would you use streams over other methods like fs.readFile?
-// Because fs.readFile() loads the entire file into memory, which is inefficient for large files. Streams process data chunk by chunk, using less memory and allowing faster start times
+// Why would we use streams over other methods like fs.readFile?
+// bcz fs.readFile() loads the entire file into memory which is inefficient for large files
+// Streams process data chunk by chunk, using less memory and allowing faster start times
 
 // EVENT EMITTER
 // is a built-in module that lets objects emit events and listen for them
@@ -21,9 +22,9 @@
 // error - Something went wrong
 // close - The stream is closed
 
-//fs.createReadStream?
-//It's a method from the fs module that lets us read a file in chunks instead of loading the whole file into memory
 
+//fs.createReadStream?
+//it's a method from the fs module that lets us read a file in chunks instead of loading the whole file into memory
 
 //Syntax
 const fs = require('fs');
@@ -58,11 +59,11 @@ readStream.on('data', (chunk) => {
 });
 
 
-//CreateWriteStream?
+//CreateWriteStream
 //its a method used to write data to a file in chunks
 
-// .write() → writes chunks(add chunks)
-// .end() → closes the stream
+// .write() - writes chunks(add chunks)
+// .end() - closes the stream
 
 //writeStream.write('Hello, ')
 // writeStream.write('world!\n')
@@ -96,7 +97,7 @@ writeStream.on('close', () => {
 });
 
 //PIPE()
-//the .pipe() method connects a readable stream to a writable stream — so that data flows automatically from one to the other
+//the .pipe() method connects a readable stream to a writable stream so that data flows automatically from one to the other
 //we don’t need to manually listen to data and write it 
 
 const fs = require('fs');
@@ -114,4 +115,3 @@ readStream.on('data', chunk => writeStream.write(chunk));
 //other than utf-8, we have--
 // 'ascii'	Basic English characters only (0–127)
 // 'hex'	Represents binary data as hexadecimal string
-
