@@ -1,22 +1,7 @@
 const fs=require('fs').promises
-const students=require('../data/students')
 const path=require('path')
+const { NotFoundError } = require('../utils/error')
 const filepath=path.join(__dirname,'../data/studentData.json')
-//using Promise
- const writeData=(fileName,data)=>{
-    return new Promise((res,rej)=>{
-        fs.writeFile(fileName,data,(err)=>{
-            if(err) return rej(error)
-                res('Written Successfully')
-        })
-    })
- }
-
- //now we call as
- writeData('plain.txt',"Hello Good Morning").then().catch()
- //But we dont need to create custom Promise, node.js already providing (fs).promise
-
-
 
 const registerGet=(req,res)=>{
     res.render('register')
@@ -24,13 +9,16 @@ const registerGet=(req,res)=>{
 
 const registerPost=async(req,res)=>{
     
-    const {name,email}=req.body
+    const {name,email}=req.body   //Destructures name and email from the form submission
     const data=await fs.readFile(filepath,'utf-8')
     const students=JSON.parse(data)
-    const newStud={name,email}
+    const newStud={       //Creates a new student object id: generated using Date.now() and name and email: from the form
+        id:Date.now(),
+        name,
+        email
+    }
     students.push(newStud)
-    await fs.writeFile(filepath,JSON.stringify(students,null,2))
-    console.log("Form Data:", req.body); 
+    await fs.writeFile(filepath,JSON.stringify(students,null,2))   //JSON look pretty with 2-space indentation and await ensures writing is complete before redirecting
     res.redirect('/studentList')
 }
 
@@ -38,24 +26,46 @@ const studentListGet=async (req,res)=>{
     try{
         const data=await fs.readFile(filepath,'utf-8')
         const studentList=JSON.parse(data)
-        res.render('studentList', { studentList }); 
+        res.render('studentList', { data:studentList}); 
     } catch (err) {
-        console.error("Error reading student list:", err.message);
-        res.status(500).send("Failed to load student list");
+        next(err)
     }
 }
 
+const fetchSingleStudent = async(id) => {
+    const data = await fs.readFile(filepath, 'utf-8');
+    const students = JSON.parse(data);
+    return students.find(s => s.id === parseInt(id));
+}
 
-// const studentListGet=(req,res)=>{
-//     res.render('studentList',{students})
-// }
-const studentListPost=(req,res)=>{
-    res.render('studentList',{students})
+
+const getSingleStudent = async(req, res, next) => {
+    const student = await fetchSingleStudent(req.params.id);
+    if (!student) {
+        const err = new NotFoundError('student not found');
+        return next(err);
+    }
+    res.render('studentDetail', { student });
 }
 
 module.exports={
     registerGet,
     registerPost,
     studentListGet,
-    studentListPost
+    getSingleStudent
 }
+
+
+//using Promise
+//  const writeData=(fileName,data)=>{
+//     return new Promise((res,rej)=>{
+//         fs.writeFile(fileName,data,(err)=>{
+//             if(err) return rej(error)
+//                 res('Written Successfully')
+//         })
+//     })
+//  }
+
+ //now we call as
+ //writeData('plain.txt',"Hello Good Morning").then().catch()
+ //But we dont need to create custom Promise, node.js already providing (fs).promise

@@ -8,11 +8,9 @@
 <body>
     <div>
         <ul>
-           <% data.forEach((val)=>{ %>
-            <li> <a href="/studentDetail/<%=val.id%>">
-                <strong>Name:</strong><%=val.name%></li>
-                </a> 
-            <%})%>
+                 <li> <strong>ID:</strong> <%=student.id%></li>
+                <li><strong>Name:</strong><%=student.name%></li>
+                 <li><strong>Email:</strong><%=student.email%></li>
         </ul>
     </div>
 </body>
