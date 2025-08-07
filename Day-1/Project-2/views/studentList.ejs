@@ -10,12 +10,11 @@
         <h1>Registered Student Details</h1>
            <ul> 
             <%students.forEach((val)=>{%>
-                <!-- <li>ID: <%=val.id%></li><br> -->
+              
             <li> <a href="/studentDetail/<%=val.id%>">
                 ID: <%=val.id%>
                 Name: <%=val.name%> </a> 
             </li>
-            <br>
             <%})%>
             </ul>
             <a href="/">Back to Home Page</a>
