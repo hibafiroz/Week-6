@@ -1,32 +1,33 @@
 const fs=require('fs').promises
 const path=require('path')
 const { NotFoundError } = require('../utils/error')
+const { readAllStudents } = require('../utils/readAllStudents')
 const filepath=path.join(__dirname,'../data/studentData.json')
 
 const registerGet=(req,res)=>{
     res.render('register')
 }
 
-const registerPost=async(req,res)=>{
-    
+const registerPost=async(req,res,next)=>{
     const {name,email}=req.body   //Destructures name and email from the form submission
-    const data=await fs.readFile(filepath,'utf-8')
-    const students=JSON.parse(data)
+    // const data=await fs.readFile(filepath,'utf-8')
+    // const students=JSON.parse(data)
+    const students=await readAllStudents()
     const newStud={       //Creates a new student object id: generated using Date.now() and name and email: from the form
         id:Date.now(),
         name,
         email
     }
-    students.push(newStud)
+     students.push(newStud)
     await fs.writeFile(filepath,JSON.stringify(students,null,2))   //JSON look pretty with 2-space indentation and await ensures writing is complete before redirecting
     res.redirect('/studentList')
 }
 
-const studentListGet=async (req,res)=>{
+const studentListGet=async (req,res,next)=>{
     try{
         const data=await fs.readFile(filepath,'utf-8')
         const studentList=JSON.parse(data)
-        res.render('studentList', { data:studentList}); 
+        res.render('studentList', { students:studentList}); 
     } catch (err) {
         next(err)
     }
