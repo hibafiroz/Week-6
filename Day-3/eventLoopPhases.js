@@ -17,7 +17,7 @@
 
 
 
-//2. Pending callBack phase:
+//2. Pending callBack phase:m
 //Some async operations didn’t finish in the right phase last time
 //instead of losing them, Node saves them here for the next cycle
 // Pending Callbacks Phase runs them now
@@ -68,7 +68,7 @@ fs.readFile("data.txt", "utf-8", (err, data) => {
 // When the operation finishes, the OS notifies libuv through mechanisms like: IOCP (Windows)
 // libuv then runs our callback in the poll phase
 
-//OS means the software layer that sits between our hardware and our applications
+//OS means the software layer that sits btw our hardware and our applications
 // me → Node.js
 // Node.js → libuv
 // libuv → Operating System
@@ -117,6 +117,7 @@ Promise.resolve().then(()=>{
 process.nextTick(()=>{
     console.log('nexttick')
 })
+
 //first prints nexttick,promise,setTimeout,setImmediate (nextTick has first priority in node then microtask queue then callback queue)
 //if setTimeout has 1000 delay, then prints nexttick,promise,setImmediate,settimeuot bcz it runs after delay
 

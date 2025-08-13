@@ -24,7 +24,16 @@ fs.readFile('data.txt', 'utf8', (err, data) => {
 // Event loop picks it up and executes callback in V8
 
 //libv
-//libuv is a C library used by Node.js for asynchronous I/O.
+//libuv is a C library used by Node.js for asynchronous I/O operations.
+//why its imp?: bcz it gives Node.js non-blocking I/O capability so the main JavaScript thread doesn’t get stuck waiting
+
+//how it works:
+//When your JS code asks to read a file (fs.readFile) or make a network request:
+// Node.js hands the task to libuv.
+// libuv decides:
+// if the OS can do it asynchronously (ex, sockets) -> OS handles it
+// if it cant be done asynchronously at OS level (like file system on some platforms), send it to the Thread Pool
+// Once the task finishes, libuv puts a callback into the Event Loop queue to be exec
 
 // It handles:
 
