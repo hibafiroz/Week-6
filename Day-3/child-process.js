@@ -111,3 +111,43 @@ process.on("message", (msg) => {
 // buffers output? means- Does Node.js collect all the output from the process in memory first, and only give it to us once the process finishes?
 // streams output? means- Does the child process send its output to us in small chunks as soon as it’s available, instead of waiting until the end?
 
+
+//When Node detects a heavy or special type of task, it moves it away from the main thread.
+//There are two common places it can move it:
+
+//1. Worker Thread
+
+//Node creates separate threads inside the same process.
+// All threads share the same memory but each has its own event loop
+// Communication is done using message passing
+//Used for CPU-heavy tasks like:
+// Math calculations
+// Image processing
+
+const { Worker } = require('worker_threads');
+
+new Worker('./heavyTask.js');
+
+// When you create a Worker Thread:
+// it runs in the same process as the main thread
+// it gets its own V8 instance
+// it gets its own libuv event loop
+// But since it’s still in the same process, you can share memory between them using SharedArrayBuffer
+
+//2.Child Processes
+
+//They are completely separate programs.
+
+// No shared memory — they talk using messages.
+// Used for:
+// Running another Node script separately
+// Running system commands
+
+const { fork } = require('child_process');
+fork('serverWorker.js');
+
+// | Feature        | Worker Thread | Child Process                |
+// | -------------- | ------------- | ---------------------------- |
+// | Same process?  |  Yes          |   No                         |
+// | Shares memory? |  Possible     |   No                         |
+// | Best for       | CPU tasks     | Separate programs / commands |
