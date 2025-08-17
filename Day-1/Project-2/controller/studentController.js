@@ -14,12 +14,17 @@ const fetchAllStudents = () => {
     })
 }
 
-const studentList = async (req, res) => {
+const studentGet = (req, res) => {
+    console.log('student page entered')
+    res.render('studentz')
+}
+
+const studentList = async (req, res,next) => {
     try {
         const studentsList = await fetchAllStudents()
-        res.render('studentList', { studentsList })
+        res.render('studentList', { students: studentsList })
     } catch (error) {
-        next(error)
+       return next(error)
         //res.status(500).send('Failed to Fetch')
     }
 }
@@ -39,19 +44,20 @@ const fetchSingleStudent = (id) => {
     })
 }
 
-const getSingleStudent = async (req, res) => {
+const getSingleStudent = async (req, res,next) => {
     try {
        const student = await fetchSingleStudent(req.params.id)
        if (!student) {
+        console.log('getSingle student page entered')
             // next(err...content)
           return next(new NotFoundError('student not found'))
           //should write return or else it will pass to middleware after all the execution of this program
         //   throw(err) //can use throw() instead next() but only works if we're inside an async and the error is caught by a try-catch that calls next(err) inside the catch
        }
         // return res.status(404).send('Student not found')
-       res.render('studentDetail', { student })
+      return res.render('studentDetail', { student })
  } catch (err) {
-        next(err)  //err passing to middlewaree (let middleware handle the response)
+       return next(err)  //err passing to middlewaree (let middleware handle the response)
     }
     // if student is not found- throw a NotFoundError and pass it to middleware via next(err)
     // if any other error(like DataBase error) occurs - pass that too using next(err)
@@ -68,9 +74,6 @@ const studentPost = (req, res) => {
     res.redirect('/')
 }
 
-const studentGet = (req, res) => {
-    res.render('student')
-}
 
 const course = (req, res) => {
     res.render('course')
