@@ -8,7 +8,6 @@
 // Network requests (http, net)
 // Timers (setTimeout, setInterval)
 // OS info (os)
-
 // The flow is: JavaScript → V8 → Node API → libuv → Event Loop → Callback → back to V8.
 
 
@@ -23,15 +22,22 @@ fs.readFile('data.txt', 'utf8', (err, data) => {
 // Once reading is done, the result is added to the callback queue
 // Event loop picks it up and executes callback in V8
 
-//libv
+//The bindings act as a bridge between:
+// JavaScript APIs(used in Node.js)
+// Low-level C++ system calls
+// the operating system(OS)
+//purpose is To connect Node.js APIs with lower-level libraries like libuv and the OS
+//this allows js code to invoke C++ functions which can then perform tasks that js alone cannot handle efficiently or at all like interacting with hardware etc.
+
+//libuv
 //libuv is a C library used by Node.js for asynchronous I/O operations.
-//why its imp?: bcz it gives Node.js non-blocking I/O capability so the main JavaScript thread doesn’t get stuck waiting
+//why its imp?: bcz it gives Node.js non-blocking I/O capability so the main js thread doesnt get stuck waiting
 
 //how it works:
-//When your JS code asks to read a file (fs.readFile) or make a network request:
+//When JS code asks to read a file (fs.readFile) or make a network request:
 // Node.js hands the task to libuv.
 // libuv decides:
-// if the OS can do it asynchronously (ex, sockets) -> OS handles it
+// if the OS can do it asynchronously (ex- sockets) -> OS handles it
 // if it cant be done asynchronously at OS level (like file system on some platforms), send it to the Thread Pool
 // Once the task finishes, libuv puts a callback into the Event Loop queue to be exec
 
@@ -46,15 +52,15 @@ fs.readFile('data.txt', 'utf8', (err, data) => {
 
 // Role of the Thread Pool
 // JavaScript in Node.js runs in a single main thread (V8 engine).
-// But some I/O operations are blocking at the OS level (e.g., reading a big file).
+// But some I/O operations are blocking at the OS level (e.g- reading a big file)
 // libuv solves this by using a pool of worker threads (default: 4, can be changed via UV_THREADPOOL_SIZE).
 
 // Flow
-// JavaScript calls a Node API like fs.readFil
-// The request is sent to libuv’s thread pool.
+// javaScript calls a Node API like fs.readFile
+// The request is sent to libuv's thread pool.
 // A worker thread executes the blocking operation.
 // When done, it sends the result back to the event loop.
-// The event loop calls your callback in the main thread.
+// The event loop calls callback in the main thread.
 
 
 // Event-Driven Architecture
@@ -80,3 +86,31 @@ console.log("End");
 // Worker thread reads file in background.
 // Main thread continues to next line (console.log("End")).
 // When read finishes, event loop runs callback → "File read complete"
+
+
+//CLUSTER
+
+//cluster is a built-in module that allows us to create multiple worker processes (copies of Node.js application) that can share the same server port
+//Node.js runs only on 1 CPU core.
+// Even if our computer has 8 cores Node.js uses just one
+// So if many users send requests, that single core gets overloaded
+//Cluster module allows Node.js to make copies of itself (workers)
+// each copy runs on a different CPU core
+// all workers can share the same port
+
+const cluster = require("cluster");
+const express = require("express");
+
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send(`Hello from Worker ${process.pid}`);
+});
+
+app.listen(3000, () => {
+  console.log(`Server running on port 3000, PID: ${process.pid}`);
+});
+
+//create 2 workers
+cluster.fork();
+cluster.fork();

@@ -17,7 +17,7 @@
 
 
 
-//2. Pending callBack phase:m
+//2. Pending callBack phase
 //Some async operations didn’t finish in the right phase last time
 //instead of losing them, Node saves them here for the next cycle
 // Pending Callbacks Phase runs them now

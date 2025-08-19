@@ -1,8 +1,13 @@
 //PROCESS
 
-//A process is simply a running instance of a program.
+//A process is simply a running instance of a program (running instance mean The program is loaded into memory and the CPU is actively executing its instructions)
 // When we run Nodejs script (e.g., node app.js) Node creates a process to execute code
-// this process contains information about the program, environment, and runtime
+// this process contains information about the program, environment, and runtime like
+//Code (the program instructions)
+// Data (variables, memory)
+// Stack (for function calls)
+// Heap (for dynamic memory allocation)
+// Resources (files, network sockets etc.)
 
 //process Object
 //it is global, no need to import
@@ -64,33 +69,34 @@ if (!name) {
 
 // Node.js Starts
 
-//1. Create the process object
+//1. Create the process object:
 //Before JS runs, Node creates the global process object and gives main thread given by os
 
-//2. It sets up libuv (handles async I/O and the event loop)
+//2. Node sets up its environment:
+//It sets up libuv (handles async I/O and the event loop)
 //It initializes V8 (the JavaScript engine that will run your code)
-//It prepares Node.js’ built-in libraries (fs,path,http...) and globals(argv,env,buffer,__dirname,__filename,setTimeout...)
+//It prepares (node API) Node.js’ built-in libraries (fs,path,http...) and globals(argv,env,buffer,__dirname,__filename,setTimeout...)
 //Parse CLI → Node looks at the arguments we passed in the terminal (node app.js hello world) and stores them in process.argv.
 //Parse Environment -> Node reads environment variables from the operating system (like PORT=3000) and stores them in process.env
 //Both steps happen before code runs, so we can use process.argv and process.env right from the first line of our script
 
-//3. Node decides Module system and entry scripts
-
+//3. Node decides Module system and entry scripts:
 // CommonJS (require) is the default if our file has a .js extension and no "type": "module" in package.json and it is synchrornous
 // ESM (import) is used if: (asynchronous but parses static import line first->means all import lines will run first)
 // file has a .mjs extension or
 // package.json has "type": "module"
 // This decision affects how Node loads and interprets the file.
 
-// entry script- Node figures out the entry point based on:
-// The path we give(node app.js -> runs app.js)
-// If we run just node, it checks package.json:
+// entry script- Node decides which file to run first.
+// if we run node app.js -> runs app.js
+// if we run just node, it checks package.json:
 // "main" field -> entry file
 // Defaults to index.js if none specified
 
-//4. after finding out entry file, it loads that file
+//4. after finding out entry file, it loads that file:
+//node reads the file and prepares to execute it
 
-//5. Top-level code runs synchronously
+//5. Top-level code runs synchronously:
 //When a module is loaded, Node executes all the code that are not inside a callback promise or event listener immediately and in order
 console.log('A');      // runs immediately
 setTimeout(() => {
@@ -101,15 +107,16 @@ console.log('C');      // runs immediately
 //A and C are top-level synchronous code, so they run right away
 
 //Synchronous code is executed directly on the js call stack
-//When you do something asynchronous (ex- fs.readFile,setTimeout,fetch) Node does not block
+//When we do something asynchronous (ex- fs.readFile,setTimeout,fetch) Node does not block
 //instead it hands the work to libuv
 //Thread pool — for CPU-bound or blocking tasks like file I/O(heavy tasks)
-//I/O polling — for network sockets, timers, and event-based operations
+//I/O polling — for network request, timers, and event-based operations
 
-//6. once Node finishes running all the top-level synchronous code, the event loop takes over
-//a. Run top-level sync code 
-//b. top-level work finishes -> event loop starts
-//now Node sits idle, waiting for libuv to signal 'somethingss ready'
+// Thread pool: handles CPU-heavy async tasks then signals completion → callback goes to I/O callbacks phase
+// I/O polling: handles network or timers, signals completion → callback goes to poll phase or timers phase
+
+//6. Event loop takes over:
+//once Node finishes running all the top-level synchronous code, the event loop takes over
 
 //Event loop phases
 // Timers phase 
@@ -117,13 +124,15 @@ console.log('C');      // runs immediately
 // Poll phase 
 // Check phase 
 // Close callbacks phase 
-// Repeat until there are no more pending tasks or listeners
+// Event loop repeats these phases until theres nothing left to do
 
-//7. callbacks return to JS to run
-//when libuv detects that an async operation is complete, it queues the corresponding callback in the right event loop phase.
-//the callback is then passed back to V8’s JS execution so it can run on the call stack, just like any other JS function.
+//7. callbacks return to JS:
+//When libuv finishes an async task:
+// it tells Node that the callback is ready
+// Node pushes the callback onto the JavaScript call stack
+// JS engine executes it like a normal function
 
 //8. when does process exit?
-// the process exits when two conditions are met:
+// the process exits when two conditions are met--
 // a. The call stack is empty: no synchronous JS code left to run
 // b. The event loop queue is empty: no pending timers,i/o callbacks, microtasks, setImmediate...
