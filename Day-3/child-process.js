@@ -1,5 +1,6 @@
 //When Node detects a heavy or special type of task, it moves it away from the main thread
 //There are two common places it can move it:
+//These are NOT inside libuv. They are separate Node.js modules built on top of OS features
 
 //1. WORKER THREAD:
 

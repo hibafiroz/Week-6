@@ -51,7 +51,7 @@ const user = process.env.USER || process.env.USERNAME || "Guest";
 // || "Guest" means neither USER nor USERNAME is set
 
 
-//Process.argv--                      ❌   
+//Process.argv--                      ❌
 const args = process.argv.slice(2); // Removes 'node' & script path  
 const name = args[0] || user; // Use CLI name or env name
 //process.argv is an array of all command-line arguments

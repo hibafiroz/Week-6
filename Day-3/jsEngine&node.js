@@ -89,7 +89,7 @@ console.log("End");
 
 
 //CLUSTER
-
+//can be used to run multiple instances of Node.js
 //cluster is a built-in module that allows us to create multiple worker processes (copies of Node.js application) that can share the same server port
 //Node.js runs only on 1 CPU core.
 // Even if our computer has 8 cores Node.js uses just one

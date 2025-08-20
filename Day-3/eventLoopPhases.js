@@ -98,8 +98,7 @@ fs.readFile(__filename, () => {
 
 
 // 6. Close Callbacks Phase
-//Executes cleanup callbacks like socket.on('close', ...) or when a file handle is closed
-
+//the close callbacks phase is the last stop of the event loop where Node.js runs "close" event handlers for things like sockets,streams when they are closed
 
 //These phases are of callback queue present in libuv and after Each phase completion, it visits two microtask queue(nextTick,promise).
 
@@ -138,4 +137,3 @@ UV_THREADPOOL_SIZE
 UV_THREADPOOL_SIZE=8 node app.js
 
 //why just 4? bcz many I/O operations in node.js are already handled by the OS asynchronously ,don’t need threads. 4 is enough
-
