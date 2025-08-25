@@ -19,7 +19,10 @@
 // | **Best use**  | Preferences, remember-me | Authentication, shopping cart      |
 
 
-//Statefull Authentication
+
+//Types of authentication approches:
+
+//1. Statefull Authentication
 //it is Called stateful bcz the server keeps the state (session data) after we log in
 //That means the server remembers you until you log out or your session expires
 
@@ -36,13 +39,13 @@ session = {
 
 //2. Session ID -> Cookie
 
-// Server sends a session ID to our browser as a cookie
+// Server sends a session ID to browser and stores in cookie
 // ex:
 Set-Cookie: connect.sid=abc123xyz; HttpOnly; Secure
 // our browser stores it automatically
 
 //3. Next Requests
-// When we visit /profile, your browser automatically sends the cookie back:
+// When we visit /profile, the browser automatically sends the cookie back:
 // connect.sid=abc123xyz
 // Server looks up that ID and finds our session obj. now it knows who we are.
 
@@ -60,7 +63,15 @@ Set-Cookie: connect.sid=abc123xyz; HttpOnly; Secure
 // Or a shared store (like Redis) so all servers can see our sessions
 
 
-//Stateless Authentication (JWT)
+//in short:
+//Server creates a session (stores data in memory/DB).
+// Server gives the client a session ID.
+// That session ID is saved in the browser as a cookie.
+// On every request, the browser automatically sends that cookie back → server looks it up.
+//So in session-based auth, the cookie is just a carrier of the session ID.
+
+
+//2. Stateless Authentication (JWT)
 
 // it is called stateless bcz the server does not keep any session data
 //instead, the server gives us a token and we must show it every time
@@ -100,6 +111,12 @@ Set-Cookie: connect.sid=abc123xyz; HttpOnly; Secure
 
 //disadvantage:its hard to logout (bcz token stays valid until it expires)
 //if token is stolen, attacker can use it
+
+//in short:
+//Server creates a JWT token with user data.
+// Client stores this token → often in a cookie or localStorage.
+// On each request, the client sends the token → server verifies it
+//Here too, a cookie can be used (but not required). it’s just one option to store the JWT
 
 
 //Using cookie-parser:
