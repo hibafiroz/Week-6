@@ -1,8 +1,8 @@
-const { spawn } = require('node:child_process');
+const { spawn } = require('child_process');
 
 // Command: node child.js 42
 const cp = spawn(
-  'node',                     // command
+  'node',                        // command
   ['child-spawn.js', '42'],         // args
   {
     cwd: __dirname,           // working directory
@@ -14,18 +14,18 @@ const cp = spawn(
 );
 
 // Handle normal output (stdout is a stream)
-cp.stdout.on('data', (data) => {
+cp.stdout.on('data', (data) => {                  //The "data" event is the built-in event name for readable streams
   console.log('PARENT got STDOUT:', data.toString());
 });
 
 // Handle error output
 cp.stderr.on('data', (data) => {
-  console.log('PARENT got STDERR:', data.toString());
-});
+  console.log('PARENT got STDERR:', data.toString())
+})
 
 // Send data into child (via stdin)
-cp.stdin.write('Hello child process!\n');
-cp.stdin.end();
+cp.stdin.write('Hello child process!\n')
+cp.stdin.end()
 
 // Handle events
 cp.on('spawn', () => console.log('Child process spawned! PID:', cp.pid));

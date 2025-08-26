@@ -1,6 +1,6 @@
 const { fork } = require('child_process');
 
-// Command: node child4.js 42
+// Command: node child-fork.js 42
 // Options: custom cwd, env, stdio
 const cp = fork(
   'child4.js',              // module path (must be a JS file)

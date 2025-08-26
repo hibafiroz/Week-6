@@ -6,17 +6,17 @@
 
 
 // A session stores data on the server-side.
-// The server creates a session object and usually gives the client a session ID (often kept inside a cookie). 
+// The server creates a session object and gives the client a session ID (often kept inside a cookie). 
 // On each request, the browser sends this session ID, and the server looks up the session data
 // Sessions are more secure and can store larger, sensitive information such as login state or shopping cart data
 
 // | Feature       | Cookie (Client-side)     | Session (Server-side)              |
 // | ------------- | ------------------------ | ---------------------------------- |
-// | **Storage**   | Browser                  | Server                             |
-// | **Data type** | Small info (4KB)         | Large/complex data                 |
-// | **Security**  | Less secure (modifiable) | More secure (hidden from client)   |
-// | **Lifetime**  | Until expiry set         | Until logout/timeout/browser close |
-// | **Best use**  | Preferences, remember-me | Authentication, shopping cart      |
+// |   Storage     | Browser                  | Server                             |
+// |   Data type   | Small info (4KB)         | Large/complex data                 |
+// |   Security    | Less secure (modifiable) | More secure (hidden from client)   |
+// |   Lifetime    | Until expiry set         | Until logout/timeout/browser close |
+// |   Best use    | Preferences, remember-me | Authentication, shopping cart      |
 
 
 
@@ -24,7 +24,10 @@
 
 //1. Statefull Authentication
 //it is Called stateful bcz the server keeps the state (session data) after we log in
-//That means the server remembers you until you log out or your session expires
+
+//Means the server keeps session data for each user. When we log in, 
+//the server creates a session object and stores it, while the browser just holds a session ID in a cookie. 
+// Each request the server checks that ID and fetches our session.
 
 //1. Login
 // we type username + password
@@ -63,29 +66,23 @@ Set-Cookie: connect.sid=abc123xyz; HttpOnly; Secure
 // Or a shared store (like Redis) so all servers can see our sessions
 
 
-//in short:
-//Server creates a session (stores data in memory/DB).
-// Server gives the client a session ID.
-// That session ID is saved in the browser as a cookie.
-// On every request, the browser automatically sends that cookie back → server looks it up.
-//So in session-based auth, the cookie is just a carrier of the session ID.
-
 
 //2. Stateless Authentication (JWT)
 
 // it is called stateless bcz the server does not keep any session data
 //instead, the server gives us a token and we must show it every time
 
+//Means the server doesn’t keep sessions. Instead it gives the client a signed token(like a JWT) that contains user info.
+//On every request, the client sends the token, and the server only verifies its signature.
+
 // 1. Login
 // we enter username + password.
 // Server checks in the database.
 // If correct → server creates a JWT token (JSON Web Token).
-// Example (looks like a long random string):
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-// This token contains our info (userId, role, expiry time) in a safe, signed way.
+// This token contains our info (userId, role, expiry time) in a safe and signed way
 
 // 2. Token sent to Client
-// Server gives the token to our browser.
+// Server gives the token to the browser.
 // Browser can store it in:
 // A cookie (safe option)
 // Or localStorage (less safe)
@@ -95,7 +92,7 @@ Set-Cookie: connect.sid=abc123xyz; HttpOnly; Secure
 //Authorization: Bearer <token_here>
 
 // Server checks if token is valid (signature + expiry).
-// If yes → server knows who we are, without storing anything.
+// If yes → server knows who they are, without storing anything
 
 // 4. Expiration
 // Token usually expires fast like 10–15 min

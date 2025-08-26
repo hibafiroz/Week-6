@@ -19,7 +19,7 @@ const USER = {
 
 // Login route: returns JWT
 app.post('/login', (req, res) => {
-  const { username, password } = req.body;
+  const { username, password } = req.body
 
   if (username===USER.username&&password===USER.password){
     const payload = {username};
