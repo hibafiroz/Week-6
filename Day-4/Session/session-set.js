@@ -59,9 +59,29 @@
 // -cookie.maxAge:
 // Time(in ms) before cookie expires
 
+//Two types of cookies based on max-age
+//1. Session Cookie
+// No max-age or expires is set. The cookie only lasts until the browser is closed.
+// Used for temporary sessions (ex- login sessions) no need to write any max-age, by default it sets session cookie
+
+//2.Persistent Cookie
+
+// expires is set. Survives even after browser restarts until the time is up
+
 //4. resave
 // resave: false, Do not save session if nothing has changed
 
 //5. saveUninitialized
 // saveUninitialized: false, Dont create empty sessions for visitors who havent write any data.
 // Prevents storing useless sessions
+
+
+//drawback of stateful..
+
+//Scaling Problems:
+//If we scale our app across multiple servers, each server needs shared session storage
+// Without it, a user logged in and stored in Server A's memory and if their next request is to server B, doesn’t have that session in its memory.
+
+//Security Concerns:
+//If session IDs are stolen, attackers can hijack the session until it expires
+//Longer session lifetimes increase risk.
