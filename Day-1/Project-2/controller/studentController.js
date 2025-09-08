@@ -52,7 +52,7 @@ const getSingleStudent = async (req, res,next) => {
             // next(err...content)
           return next(new NotFoundError('student not found'))
           //should write return or else it will pass to middleware after all the execution of this program
-        //   throw(err) //can use throw() instead next() but only works if we're inside an async and the error is caught by a try-catch that calls next(err) inside the catch
+        //   throw(err) //can use throw() instead next() but only works if we're inside an async and the error is caught by a try-catch that calls next(err) inside the catch and no need to write return.
        }
         // return res.status(404).send('Student not found')
       return res.render('studentDetail', { student })

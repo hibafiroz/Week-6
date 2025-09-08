@@ -16,9 +16,7 @@ app.get('/test', (req, res, next) => {
 });
 
 //next(err) usage:
-
 //next(err) is used to pass an error to the central error-handling middleware
-//instead of handling the error in every route, we can send it to one place ,the global error handler which improves code cleanliness
 
 //Step 2:
  //add Central Error Middleware (at the bottom)
@@ -75,7 +73,7 @@ app.get('/async-error', async (req, res, next) => {
 //in asynchronous-- if we throww err without try catch, it wont show any error in app until we go to that particular page where error threw. so from there, the app will crash over all
 //so this is why it is runtime err and called uncaught exception
 
-// Unhandled Promise Rejection
+// Unhandled Promise Rejection (just for async bcz promise itself async)
 //  A Promise is rejected but there’s no .catch() or try–catch to handle it
 // Promise.reject("Something went wrong");
 
@@ -85,7 +83,7 @@ app.get('/async-error', async (req, res, next) => {
 // How to Handle Them??
 
 // 1. Handle Uncaught Exceptions
-//if any error is thrown and not caught anywhere, don’t crash immediately. instead run this function
+//if any error is thrown without using try catch and we dont know where so we simply use this using process to handle uncaught exception
 process.on('uncaughtException', (err) => {
     console.error('Uncaught Exception:', err.message);
     process.exit(1); //  stopS app safely
@@ -95,7 +93,7 @@ process.on('uncaughtException', (err) => {
 //.on("uncaughtException", handler) listens for errors that are not caught anywhere in the app.
 
 //when such an error happens, our handler function runs and receives the error
-// Good for catching sync code errors you missed.
+// Good for catching sync code errors we missed.
 
 
 // 2. Handle Unhandled Rejections
@@ -105,7 +103,7 @@ process.on('unhandledRejection', (reason, promise) => {
 
 });
 
-// Differrent events are--
+// Differrent events in node js are--
 
 // uncaughtException
 // unhandledRejection

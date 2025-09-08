@@ -11,14 +11,14 @@
 // const cluster = require("cluster");
 // const express = require("express");
 
-// const app = express();
+// const app = express()
 
-// app.get("/", (req, res) => {
-//   res.send(`Hello from Worker ${process.pid}`);
-// });
+// app.get("/",(req,res)=>{
+//   res.send(`Hello from Worker ${process.pid}`)
+// })
 
 // app.listen(3000, () => {
-//   console.log(`Server running on port 3000, PID: ${process.pid}`);
+//   console.log(`Server running on port 3000, PID: ${process.pid}`)
 // });
 
 // create 2 workers
@@ -26,16 +26,15 @@
 // cluster.fork();
 
 
-
 const cluster = require('cluster');
 const os = require('os');
 
-if (cluster.isPrimary) {
-  const cpuCount = os.cpus().length;
+if (cluster.isPrimary) {   //means this is the main process(not a worker)
+  const cpuCount = os.cpus().length  //finds how many CPU cores my system has
 
   // workers create
-  for (let i = 0; i < cpuCount; i++) {
-    cluster.fork();
+  for(let i = 0; i < cpuCount; i++){  //Creates one worker process per core
+    cluster.fork()
   }
 
   // if any worker fails, create one
@@ -44,7 +43,7 @@ if (cluster.isPrimary) {
     cluster.fork();
   });
 
-} else {
+} else {  //This block runs in worker processes. Each worker runs an Express server on port 3000
   // Worker process: create Express server
   const express = require('express');
   const app = express();
@@ -54,6 +53,9 @@ if (cluster.isPrimary) {
   });
 
   app.listen(3000, () => {
-    console.log(`Worker PID ${process.pid} listening on http://localhost:3000`);
+    console.log(`Worker PID ${process.pid} listening on http://localhost:3000`)
   });
 }
+
+
+

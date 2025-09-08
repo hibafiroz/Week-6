@@ -7,7 +7,7 @@
 //  Bcz Node.js handles many users at once If one user request takes time, Node can still handle others instead of freezing
 
 
-async/await syntax
+//async/await syntax
 async function myFunction() {
     try {
         const result = await someAsyncFunction();

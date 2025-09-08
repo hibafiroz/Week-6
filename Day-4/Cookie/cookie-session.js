@@ -1,14 +1,73 @@
+//Why cookie is introduced?
+//HTTP is stateless - every request/response is independent(the server can’t remember users)
+
+
+//COOKIE:
 // A cookie is small data stored on the client-side browser in the form of a key-value pair.
 // it is sent with every request to the server
 //  Cookies are usually used for things like remember-me options or storing a small identifier. 
 // they are limited in size (<= 4KB) and 
 // are less secure since they can be modified by the client
+//When a site (say example.com) sets a cookie, that cookie is sent back only to that same domain by the browser, cannot be used by other site.
 
 
-// A session stores data on the server-side.
-// The server creates a session object and gives the client a session ID (often kept inside a cookie). 
-// On each request, the browser sends this session ID, and the server looks up the session data
-// Sessions are more secure and can store larger, sensitive information such as login state or shopping cart data
+//WHO CREATES COOKIES?
+//Cookies are stored in the browser(client-side) but can be set by either server or client.
+// 1. Server-side cookies
+// Created by the server and sent in the HTTP response header
+// Example:
+// Set-Cookie: sessionId=abc123; HttpOnly
+// Browser saves this and sends it back automatically with every request
+
+// 2. Client-side cookies
+// Created directly by the browser using JavaScript.
+// Example:
+// document.cookie = "theme=dark; path=/"
+// These are less secure, bcz JavaScript can read andwrite them
+
+
+//is it safe to store in cookie? No
+//bcz Users can view and modify cookies and document.cookie lets JavaScript read cookies and Plain text transmission(if no HTTPS)
+//solutions for security
+
+//COOKIE ATTRIBUTES: (server side cookie)
+// 1. Secure (can create from JS client side)
+// Means the cookie will only be sent over HTTPS(not HTTP)
+// Prevents attackers from sniffing cookies in plain text.
+// Ex: Set-Cookie: sessionId=abc123; Secure
+
+// 2. HttpOnly(if its http) (only by server)
+// Means JS cannot read the cookie (document.cookie wont show it)
+// Only the server can access it when the browser sends it with requests
+// this protects against XSS (Cross-Site Scripting) attacks
+// Ex: Set-Cookie: sessionId=abc123; HttpOnly
+
+// 3. SameSite (can create from JS client side)
+// Controls whether cookies are sent on cross-site requests
+//there are 3 values--
+// Strict - Cookie sent only for requests from the same site (Good security but sometimes breaks usability).
+// Lax - Cookie sent for same site + safe cross-site requests(like clicking a link). This is the default in most browsers.
+// None - Cookie is sent everywhere (same-site + cross-site).
+// Must be used with Secure (only over HTTPS).
+// This is how third-party cookies (like ad trackers) work.
+
+
+//WHY COOKIE-PARSER?
+// By default, Express doesn’t parse cookies from the request headers.
+// Cookies are just sent as a long string in req.headers.cookie.
+// Ex: "theme=dark; sessionId=abc123; loggedIn=true"
+// we have to manually split by ; and parse key-value pairs
+// cookie-parser middleware does that work for us.
+//It also supports signed cookies
+
+
+//XSS = CROSS-SITE SCRIPTING ATTACK:
+// XSS is a security vulnerability where attackers inject malicious javaScript into a website
+// If the site does not sanitize user input, the attackers script runs in other users browsers.
+// Ex: <input type="text" value="<script>alert('Hacked!')</script>">
+// If the website doesn’t sanitize input, this script runs, attacker can steal cookies, tokens, or manipulate the page.
+// thats why we use cookies with HttpOnly: true, so even if XSS runs, attackers cant read sensitive cookies
+
 
 // | Feature       | Cookie (Client-side)     | Session (Server-side)              |
 // | ------------- | ------------------------ | ---------------------------------- |
@@ -174,5 +233,3 @@ app.get("/clear-cookie", (req, res) => {
 // Visiting http://localhost:3000/clear-cookie
 
 //Now if we go back to /get-cookie, it will say Hello Guest!.
-
-
