@@ -112,3 +112,40 @@ jwt.verify(token, secretKey, [options], [callback])
 //if it uses RS256- pass the public key.
 //options- maxAge,issuer,algorithms,audience
 //callBack-  if we provide a callback- async style. if not, it throws an error when invalid (sync style)
+
+
+//JWT in LocalStorage:
+// Step 1: User logs in
+// User submits username/password.
+// Server checks them.
+// If valid → server creates a JWT and sends it back as JSON.
+res.json({ token });
+
+// Step 2: Client stores JWT
+// The browser (frontend JS) stores it in localStorage:
+localStorage.setItem("token", data.token);
+
+//Step 3: Client sends JWT back
+// Whenever client makes an API call (like /profile),
+// it puts the token inside HTTP headers:
+fetch("/profile", {
+  method: "GET",
+  headers: {
+    "Authorization": "Bearer " + localStorage.getItem("token"),
+    "Content-type" : "application/json"
+  }
+});
+
+//Step 4: Server verifies JWT
+function authMiddleware(req, res, next) {
+  const authHeader = req.headers["authorization"];  //or req,headers.authoization , in authoraization it has data
+  const token = authHeader && authHeader.split(" ")[1]; // 1(index) for token and 0 for bearer
+  if (!token) return res.status(401).json({ message: "Token not found" })
+  try {
+    const decoded = jwt.verify(token, secretKey);
+    req.user = decoded; // attach user info
+    next();
+  } catch (err) {
+    return res.status(403).json({ message: "Invalid token" });
+  }
+}

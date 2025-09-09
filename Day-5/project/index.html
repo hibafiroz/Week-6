@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebSocket Client</title>
+   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="border-2 border-black border-solid p-5 flex flex-col text-center">
+  <h1>WebSocket Client</h1>
+  <div id="status">Connecting to server...</div>
+  <div id="messages"></div><br>
+  <div>
+    <input type="text" id="messageInput" placeholder="Type your message" class="border-1 border-black">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    const status=document.getElementById('status')
+    const messages=document.getElementById('messages')
+    const messageInput=document.getElementById('messageInput')
+
+    const ws = new WebSocket('ws://localhost:8080')
+
+    ws.onopen=()=>{
+      status.textContent='Connected to server'
+      status.style.color='green'
+    }
+
+    ws.onmessage = (event) => {
+      const message = document.createElement('div')
+      message.className = 'message'
+      message.textContent = event.data
+      messages.appendChild(message)
+      messages.scrollTop = messages.scrollHeight
+    }
+
+    ws.onerror=(error)=>{
+      status.textContent='Error: '+error.message
+      status.style.color='red'
+    }
+
+    ws.onclose=()=>{
+      status.textContent='Disconnected from server';
+      status.style.color='red'
+    }
+
+    function sendMessage(){
+      const message=messageInput.value.trim();
+      if(message){
+        ws.send(message);
+        messageInput.value=''
+      }
+    }
+  </script>
+</body>
+</html>
