@@ -30,3 +30,11 @@
 //option 3:es module
 import { io } from 'socket.io-client';
 
+//what it implement:
+// User join event: Notify everyone when a new user joins.
+// User leave event: Notify everyone when a user disconnects.
+// Realtime message broadcasting: Chat messages are shared instantly with all connected clients
+
+//EVENtS:
+//built in event: connection, disconnect, error
+//custom event: chat message,typing,user joined
