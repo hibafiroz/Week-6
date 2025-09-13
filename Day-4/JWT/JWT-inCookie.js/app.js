@@ -18,7 +18,7 @@ const tokenFunction=(user)=>{
 }
 
 function authMiddleware(req,res,next){
-  const token=req.cookies?.token
+  const token=req.cookies?.Hiba
   if(!token){
     return res.status(401).json({message:'Not found'})
   }else{
@@ -42,7 +42,7 @@ app.post('/login',(req,res)=>{
   const {username,password}=req.body
   if(username===user.username&&password===user.password){
     const token=tokenFunction(user)
-    res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
+    res.cookie("Hiba", token, { httpOnly: true, maxAge: 3600000 });
     return res.status(200).json({message:'created'})
   }else{
     res.status(401).json({ message:"Invalid credentials"})

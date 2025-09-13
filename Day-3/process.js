@@ -1,18 +1,8 @@
 //PROCESS
 
-//A process is simply a running instance of a program (running instance mean The program is loaded into memory and the CPU is actively executing its instructions)
-// When we run Nodejs script (e.g., node app.js) Node creates a process to execute code
-// this process contains information about the program, environment, and runtime like
-//Code (the program instructions)
-// Data (variables, memory)
-// Stack (for function calls)
-// Heap (for dynamic memory allocation)
-// Resources (files, network sockets etc.)
-
-//process Object
-//it is global, no need to import
-//Node provides a global process object that lets us interact with the current process --
-// we can read environment variables, get platform info, read command-line arguments, check memory usage, and even exit the process
+//process is a global object that gives information and control over the current Node.js runtime
+// When we run Nodejs script (ex, node app.js) Node creates a process to execute code
+//we can read environment variables, get platform info, read command-line arguments, check memory usage, and even exit the process
 
 //process properties
 // process.pid - The process ID assigned by the OS
@@ -20,7 +10,7 @@
 // process.platform - OS platform (win32, linux, darwin)
 // process.cwd() - Current working directory
 // process.env - Environment variables
-// process.argv - Arguments passed to the script
+// process.argv - Arguments passed to the scriptm
 
 console.log("Process ID:", process.pid);
 console.log("Node Version:", process.version);
@@ -41,7 +31,7 @@ setTimeout(() => {
 }, 2000);
 
 
-//Process.env--                      ❌
+//Process.env--
 
 const user = process.env.USER || process.env.USERNAME || "Guest";
 //This line tries to get your system username. If it can’t, it sets user to "Guest"
@@ -51,7 +41,7 @@ const user = process.env.USER || process.env.USERNAME || "Guest";
 // || "Guest" means neither USER nor USERNAME is set
 
 
-//Process.argv--                      ❌
+//Process.argv--
 const args = process.argv.slice(2); // Removes 'node' & script path  
 const name = args[0] || user; // Use CLI name or env name
 //process.argv is an array of all command-line arguments
@@ -76,13 +66,10 @@ if (!name) {
 //It sets up libuv (handles async I/O and the event loop)
 //It initializes V8 (the JavaScript engine that will run your code)
 //It prepares (node API) Node.js’ built-in libraries (fs,path,http...) and globals(argv,env,buffer,__dirname,__filename,setTimeout...)
-//Parse CLI → Node looks at the arguments we passed in the terminal (node app.js hello world) and stores them in process.argv.
-//Parse Environment -> Node reads environment variables from the operating system (like PORT=3000) and stores them in process.env
-//Both steps happen before code runs, so we can use process.argv and process.env right from the first line of our script
 
-//3. Node decides Module system and entry scripts:
-// CommonJS (require) is the default if our file has a .js extension and no "type": "module" in package.json and it is synchrornous
-// ESM (import) is used if: (asynchronous but parses static import line first->means all import lines will run first)
+//3. Node decides Module system and entry script:
+// CommonJS is the default if our file has a .js extension and no "type": "module" in package.json and it is synchrornous
+// ESM is used if: 
 // file has a .mjs extension or
 // package.json has "type": "module"
 // This decision affects how Node loads and interprets the file.
@@ -98,26 +85,14 @@ if (!name) {
 
 //5. Top-level code runs synchronously:
 //When a module is loaded, Node executes all the code that are not inside a callback promise or event listener immediately and in order
-console.log('A');      // runs immediately
-setTimeout(() => {
-  console.log('B');    // scheduled for later
-}, 0);
-console.log('C');      // runs immediately
-// Output: A, C, B
-//A and C are top-level synchronous code, so they run right away
-
 //Synchronous code is executed directly on the js call stack
 //When we do something asynchronous (ex- fs.readFile,setTimeout,fetch) Node does not block
 //instead it hands the work to libuv
 //Thread pool — for CPU-bound or blocking tasks like file I/O(heavy tasks)
 //I/O polling — for network request, timers, and event-based operations
 
-// Thread pool: handles CPU-heavy async tasks then signals completion → callback goes to I/O callbacks phase
-// I/O polling: handles network or timers, signals completion → callback goes to poll phase or timers phase
-
 //6. Event loop takes over:
 //once Node finishes running all the top-level synchronous code, the event loop takes over
-
 //Event loop phases
 // Timers phase 
 // I/O callbacks phase 
@@ -136,3 +111,32 @@ console.log('C');      // runs immediately
 // the process exits when two conditions are met--
 // a. The call stack is empty: no synchronous JS code left to run
 // b. The event loop queue is empty: no pending timers,i/o callbacks, microtasks, setImmediate...
+
+
+// JS Engine & Node Internals
+
+// 1. V8 Engine:
+// it is Developed by Google used in chrome
+// it is Written in C++
+// Responsibilities:
+// Compiles JS into machine code
+// Executes code on the call stack.
+// Handles memory management with heap
+// Pure V8 only knows JavaScript no setTimeout, no fs, no http.
+
+
+// 2. Node.js APIs
+// Extra features added on top of V8 so JS can interact with the system.
+// Examples:
+// Timers → setTimeout, setInterval.
+// File System → fs.readFile, fs.writeFile.
+// Crypto → hashing, encryption.
+// HTTP/HTTPS → server & client.
+// Provided by Node internals and backed by libuv
+
+
+// How They Work Together
+// JS code runs inside V8
+// If JS calls a Node API (fs.readFile, setTimeout), it is not handled by V8.
+// Node passes the task to libuv → event loop/thread pool.
+// When done, callbacks are pushed back into V8’s call stack for execution.

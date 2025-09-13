@@ -29,7 +29,7 @@
 //Syntax
 const fs = require('fs');
 //parameters- path,encoding,highWaterMark(size of each chunk in bytes)
-const stream = fs.createReadStream('filename.txt', { encoding: 'utf8', highWaterMark:16 });//read 16 bytes
+const readStream = fs.createReadStream('filename.txt', { encoding: 'utf8', highWaterMark:16 });//read 16 bytes
 
 readStream.on('data', (chunk) => {
   console.log('Chunk:', chunk);  // logs parts of file

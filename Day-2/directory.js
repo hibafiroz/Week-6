@@ -66,6 +66,7 @@ fs.readdir(path,[ options], callback)
 // err: Error object if something goes wrong
 // files: Array of names
 
+
 const fs = require('fs');
 
 fs.readdir('./myFolder', (err, files) => {
@@ -93,7 +94,7 @@ fs.readdir('./myFolder', { withFileTypes: true }, (err, items) => {
 
 
 // fs.mkdir()
-// it is a built-in fs module used to create a new folder (directory) in your file system.
+// it is a built-in fs module used to create a new folder (directory) in file system.
 fs.mkdir(path,[ options], callback)
 
 //simple creating folder

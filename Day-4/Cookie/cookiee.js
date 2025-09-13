@@ -5,7 +5,6 @@
 //COOKIE:
 // A cookie is small data stored on the client-side browser in the form of a key-value pair.
 // it is sent with every request to the server
-//  Cookies are usually used for things like remember-me options or storing a small identifier. 
 // they are limited in size (<= 4KB) and 
 // are less secure since they can be modified by the client
 //When a site (say example.com) sets a cookie, that cookie is sent back only to that same domain by the browser, cannot be used by other site.
@@ -53,7 +52,7 @@
 
 
 //WHY COOKIE-PARSER?
-// By default, Express doesn’t parse cookies from the request headers.
+// By default, Express doesnt parse cookies from the request headers.
 // Cookies are just sent as a long string in req.headers.cookie.
 // Ex: "theme=dark; sessionId=abc123; loggedIn=true"
 // we have to manually split by ; and parse key-value pairs

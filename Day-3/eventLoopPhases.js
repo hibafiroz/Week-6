@@ -18,7 +18,7 @@
 
 
 //2. Pending callBack phase
-//Some async operations didn’t finish in the right phase last time
+//Some async operations didnt finish in the right phase last time
 //instead of losing them, Node saves them here for the next cycle
 // Pending Callbacks Phase runs them now
 //ex: Error callbacks from failed network requests
@@ -40,8 +40,7 @@
 // Run all I/O callbacks that are ready
 // This includes things like:
 // Reading a file (fs.readFile)
-// Receiving data from the internet (HTTP request)
-// Database query results
+// network request
 
 fs.readFile("data.txt", "utf-8", (err, data) => {
     console.log("File content:", data); // This runs in poll phase
@@ -49,32 +48,16 @@ fs.readFile("data.txt", "utf-8", (err, data) => {
 
 // If nothing is ready, Node.js might wait(block) here for a short while until:
 // New I/O events finish (file read completes, network responds)
-
-// If a timer is about to expire, it won’t wait too long — it’ll move on to the Timers phase in the next tick.
+// If a timer is about to expire, it wont wait ,it’ll move on to the Timers phase in the next tick.
 // it is called heart of loop Because most asynchronous work (network requests, file reads, DB calls) is handled right here
 
-// If there are I/O callbacks ready - execute them immediately
-// If there are no callbacks ready:
-// If timers are pending - exit poll and move to Timers Phase
-// If no timers - wait for new events (blocking wait)
 
 
 //I/O polling:
-//I/O polling is the activity that happens inside the Poll Phase where libuv checks for completed I/O operations (file reads/writes,network data) and retrieves their results from the OS
+//, I/O polling is the mechanism present inside the poll phase that waits for I/O operations to finish and then executes their callbacks when theyre ready
 
-//When Node.js (via libuv) needs to do something like read a file:
-// libuv makes a system call to the OS (like read(), open(), etc)
-// The OS kernel talks directly to the hardware (your disk, network card, etc)
-// When the operation finishes, the OS notifies libuv through mechanisms like: IOCP (Windows)
-// libuv then runs our callback in the poll phase
-
-//OS means the software layer that sits btw our hardware and our applications
-// me → Node.js
-// Node.js → libuv
-// libuv → Operating System
-// OS → Hardware (read from disk)
-// OS → libuv (done!)
-// libuv → our callback
+//File I/O (like fs.readFile) → handled by thread pool (since OS APIs are blocking)
+// Network I/O (like sockets, HTTP) → handled by I/O polling (OS notifies libuv)
 
 
 
@@ -98,10 +81,12 @@ fs.readFile(__filename, () => {
 
 
 // 6. Close Callbacks Phase
-//the close callbacks phase is the last stop of the event loop where Node.js runs "close" event handlers for things like sockets,streams when they are closed
+
+// This phase executes callbacks for closed handles, like:
+// socket.on('close', …)
+// server.on('close', …)
 
 //These phases are of callback queue present in libuv and after Each phase completion, it visits two microtask queue(nextTick,promise).
-
 
 ex:
 setImmediate(()=>{
@@ -126,11 +111,8 @@ process.nextTick(()=>{
 // non-blocking tasks (like file I/O, DNS, and crypto) outside the main event loop
 //This keeps Node.js fast and non-blocking even though it runs JavaScript on a single main thread
 
-//By default, libuv thread pool has 4 worker threads
+//By default, thread pool has 4 worker threads
 //This size is controlled by the environment variable:
-
-UV_THREADPOOL_SIZE
-
 //You can increase it up to a maximum of 128 threads 
 //ex if i want to set 8-- 
 

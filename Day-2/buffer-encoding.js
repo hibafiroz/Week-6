@@ -41,8 +41,8 @@ const buf3 = Buffer.from([72, 105])  //Hi
 
 //Reading and writing buffer:
 
-const buf = Buffer.alloc(5);
-buf.write('Hello');
+const buf4 = Buffer.alloc(5);
+buf4.write('Hello');
 console.log(buf.toString()); //Hello
 
 

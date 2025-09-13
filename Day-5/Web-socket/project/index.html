@@ -1,55 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>WebSocket Client</title>
-   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="border-2 border-black border-solid p-5 flex flex-col text-center">
-  <h1>WebSocket Client</h1>
-  <div id="status">Connecting to server...</div>
-  <div id="messages"></div><br>
-  <div>
-    <input type="text" id="messageInput" placeholder="Type your message" class="border-1 border-black">
-    <button onclick="sendMessage()">Send</button>
+<body class="mx-auto max-w-3xl p-4">
+ <div>
+    <div class="mb-4">
+      <h1 class="text-3xl font-bold ml-66">WEBSOCKET DEMO</h1>
+    </div><br>
+    <div class="mb-4">
+      <input type="text" id="message" placeholder="Enter your message" 
+             class="border-2 border-black p-2">
+      <button id="btn" class="border-2 border-black p-1 bg-gray-200 hover:bg-gray-300">Send</button>
+    </div>
+    <div id="connect" class="text-green-600"></div>
+    <div id="status" class="border-2 border-black p-3 h-40"></div>
   </div>
 
-  <script>
-    const status=document.getElementById('status')
-    const messages=document.getElementById('messages')
-    const messageInput=document.getElementById('messageInput')
-
-    const ws = new WebSocket('ws://localhost:8080')
-
-    ws.onopen=()=>{
-      status.textContent='Connected to server'
-      status.style.color='green'
-    }
-
-    ws.onmessage = (event) => {
-      const message = document.createElement('div')
-      message.className = 'message'
-      message.textContent = event.data
-      messages.appendChild(message)
-      messages.scrollTop = messages.scrollHeight
-    }
-
-    ws.onerror=(error)=>{
-      status.textContent='Error: '+error.message
-      status.style.color='red'
-    }
-
-    ws.onclose=()=>{
-      status.textContent='Disconnected from server';
-      status.style.color='red'
-    }
-
-    function sendMessage(){
-      const message=messageInput.value.trim();
-      if(message){
-        ws.send(message);
-        messageInput.value=''
+    <script>
+      const ws=new WebSocket('ws://localhost:3000')
+      const message=document.getElementById('message')
+      const btn=document.getElementById('btn')
+      const status=document.getElementById('status')
+      const connect=document.getElementById('connect')
+      ws.onopen=()=>{
+        connect.innerHTML+='Connected to Server! <br>'
       }
-    }
-  </script>
+      ws.onmessage=(msg)=>{
+        status.innerHTML+=msg.data+'<br>'
+      }
+      btn.addEventListener('click',()=>{
+        const msg=message.value
+        //while broadcasting, everyone can know who the client is, so we can send JSON
+        ws.send("Server recieved: "+JSON.stringify({
+          type:'chat',
+          user:'Hiba',
+          message:msg
+        },null,2))
+        status.innerHTML+='You sent: '+msg+'<br>'
+        msg.input=''
+      })
+    </script>
 </body>
 </html>

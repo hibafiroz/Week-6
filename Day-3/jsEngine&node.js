@@ -2,9 +2,10 @@
 
 //The V8 engine is Google’s open-source JavaScript engine written in C++. It takes JavaScript code, parses it, and compiles it into machine code for fast execution.
 
-// Node.js uses V8 to run JavaScript outside the browser and adds its own built-in APIs — like fs, http, os, and timers — which JavaScript alone doesn’t provide. These Node APIs are implemented in C/C++ and interact with libuv, a C library that manages the event loop and thread pool for asynchronous I/O.
+// Node.js uses V8 to run JavaScript outside the browser and adds its own built-in APIs — like fs, http, os, and timers — which JavaScript alone doesn’t provide.
+// These Node APIs are implemented in C/C++ and interact with libuv, a C library that manages the event loop and thread pool for asynchronous operations.
 // node api provide
-//  File system access (fs)
+// File system access (fs)
 // Network requests (http, net)
 // Timers (setTimeout, setInterval)
 // OS info (os)
@@ -22,10 +23,7 @@ fs.readFile('data.txt', 'utf8', (err, data) => {
 // Once reading is done, the result is added to the callback queue
 // Event loop picks it up and executes callback in V8
 
-//The bindings act as a bridge between:
-// JavaScript APIs(used in Node.js)
-// Low-level C++ system calls
-// the operating system(OS)
+//The bindings act as a bridge
 //purpose is To connect Node.js APIs with lower-level libraries like libuv and the OS
 //this allows js code to invoke C++ functions which can then perform tasks that js alone cannot handle efficiently or at all like interacting with hardware etc.
 
@@ -34,12 +32,12 @@ fs.readFile('data.txt', 'utf8', (err, data) => {
 //why its imp?: bcz it gives Node.js non-blocking I/O capability so the main js thread doesnt get stuck waiting
 
 //how it works:
-//When JS code asks to read a file (fs.readFile) or make a network request:
+// When JS code asks to read a file (fs.readFile) or make a network request:
 // Node.js hands the task to libuv.
 // libuv decides:
 // if the OS can do it asynchronously (ex- sockets) -> OS handles it
 // if it cant be done asynchronously at OS level (like file system on some platforms), send it to the Thread Pool
-// Once the task finishes, libuv puts a callback into the Event Loop queue to be exec
+// Once the task finishes, libuv puts a callback into the Event Loop queue to be execute
 
 // It handles:
 
@@ -54,14 +52,7 @@ fs.readFile('data.txt', 'utf8', (err, data) => {
 // JavaScript in Node.js runs in a single main thread (V8 engine).
 // But some I/O operations are blocking at the OS level (e.g- reading a big file)
 // libuv solves this by using a pool of worker threads (default: 4, can be changed via UV_THREADPOOL_SIZE).
-
-// Flow
-// javaScript calls a Node API like fs.readFile
-// The request is sent to libuv's thread pool.
-// A worker thread executes the blocking operation.
-// When done, it sends the result back to the event loop.
-// The event loop calls callback in the main thread.
-
+ 
 
 // Event-Driven Architecture
 // Core idea: “Don’t wait — register a callback and move on.”
