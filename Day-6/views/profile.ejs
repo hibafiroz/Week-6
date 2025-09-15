@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Portal</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-black">
+
+  <div class="text-center flex items-center justify-center h-screen">
+
+    <div><img src="/hiba.jpg" alt="Student Photo" class="w-64 h-64 rounded-full shadow-lg object-cover border-5 border-purple-600"></div>
+ <div class="text-left ml-9">
+     <%user.forEach((val)=>{%>
+    <h2 class="text-3xl font-semibold text-white mb-2"><%=val.username%></h2>
+    <p class="text-white mb-1">Age: <%=val.age%></p>
+    <p class="text-white mb-1">Course: <%=val.course%></p>
+    <p class="text-white mb-4">Student ID: <%=val.id%></p>
+     <%})%>
+    <a href="" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-200">Logout</a>
+ </div>
+</div>
+
+</body>
+</html>
