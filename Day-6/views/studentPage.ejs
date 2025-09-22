@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col items-center p-8">
+
+  <h1 class="text-4xl font-bold text-purple-500 mb-8">BULLETINS</h1>
+
+  <ul class="w-full max-w-2xl space-y-4">
+    <% bulletins.forEach(file => { %>
+      <li class="bg-neutral-900 border border-purple-700 rounded-lg px-6 py-3 hover:bg-neutral-800 transition">
+        <a href="/<%= file %>" target="_blank" class="text-purple-400 hover:text-purple-200 font-semibold underline underline-offset-2">
+          <%= file %>
+        </a>
+      </li>
+    <% }) %>
+  </ul>
+
+</body>
+</html>

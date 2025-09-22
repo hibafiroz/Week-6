@@ -19,14 +19,14 @@ async function myFunction() {
 
 // async keyword:
 
+//Declares a function that always returns a Promise
 // Used before a function to make it asynchronous
-// This means we can use await inside that function
 
 //  await keyword:
 
 // Used before a promise
 // It pauses the function until the promise is resolved or rejected
-
+//This makes asynchronous code look and behave like synchronous code
 
 //Real world example
 

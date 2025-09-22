@@ -1,45 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Simple Chat</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-</head>
-<body>
-  <h1>Simple Chat</h1>
-  <ul id="messages"></ul>
-  <form id="form" action="#">
-    <input id="input" autocomplete="off" placeholder="Type your message..." />
-   <button>Send</button>
-   </form>
-
+  <title>Socket.IO Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="/socket.io/socket.io.js"></script>
+</head>
+<body class="bg-black text-orange-500 flex flex-col items-center h-screen">
+  <h1 class="text-3xl font-bold text-orange-400 mt-6">Socket.IO Demo</h1>
+  
+  <div id="messageDiv" class="bg-neutral-950 border-2 border-orange-600 rounded-lg w-4/5 max-w-2xl h-3/5 overflow-y-auto p-4 mt-6 shadow-lg shadow-orange-500/30"></div>
+  
+  <div class="flex w-4/5 max-w-2xl mt-4">
+    <input id="inp" class="flex-1 p-3 border-2 border-orange-600 rounded-l-md bg-neutral-950 text-orange-200 placeholder-orange-400" placeholder="Type your message..."/>
+    <button onclick="sendMsg()" class="bg-orange-600 hover:bg-orange-500 px-6 py-3 rounded-r-md text-white">Send</button>
+  </div>
   <script>
-    const socket = io();
-    const form = document.getElementById('form');
-    const input = document.getElementById('input');
-    const messages = document.getElementById('messages');
+      const messageDiv=document.getElementById('messageDiv')
+      const input=document.getElementById('inp')
+      const socket=io()
 
-    // Handle form submission
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const message = input.value.trim();
-        if (message) {
-            // Emit the message to the server
-            socket.emit('chat message', message);
-                // Clear the input
-                input.value = '';
-            }
-        });
+      function sendMsg(){
+        const message=input.value.trim()
+        if(!message) return
+        socket.emit('message',message)
+        input.value=''
+      }
 
-        // Listen for incoming messages
-        socket.on('chat message', (msg) => {
-            const item = document.createElement('li');
-            item.textContent = msg;
-            messages.appendChild(item);
-            // Scroll to the bottom
-            messages.scrollTop = messages.scrollHeight;
-        });
-    </script>
+      socket.on('message',(data)=>{
+         messageDiv.innerHTML += data + '<br>';
+      })
+      
+  </script>
 </body>
 </html>

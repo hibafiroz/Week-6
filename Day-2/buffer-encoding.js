@@ -1,12 +1,13 @@
 //Buffer:
-
-// a Buffer is a temporary memory space for storing raw binary data (like bytes).
-// Needed because JavaScript normally only handles strings (text), not raw binary.
+// javaScript strings are UTF-16 encoded and not suited for handling raw binary data so Node.js introduced the Buffer class
+// it is a global class used to handle raw binary data. it allow us to work with binary streams of data such as files, images or audio
+//represent an array of bytes
+//We can create them using methods like Buffer.alloc(size) or Buffer.from(data)
 // Common when working with files, streams etc
 
-const buf = Buffer.from('Hello'); // default = utf-8
-console.log(buf);        // <Buffer 48 65 6c 6c 6f>
-console.log(buf.toString()) // "Hello"
+const buf = Buffer.from('Hello') //default = utf-8
+console.log(buf);        //<Buffer 48 65 6c 6c 6f>
+console.log(buf.toString()) //"Hello"
 
 //Here 48 65 6c 6c 6f are hex values of ASCII codes for "Hello"
 
@@ -19,7 +20,7 @@ console.log(buf.toString()) // "Hello"
 
 // UTF-8 - (default) supports almost all characters worldwide
 // ASCII - basic English characters (0–127)
-// Base64 - represents binary data as ASCII text, often used for transmitting files or images in text-based protocols.
+// Base64 -used for transmitting files or images in text-based protocols.
 // Hex - represents each byte as a two-digit hexadecimal value
 
 const buff = Buffer.from('Hello World','utf-8')

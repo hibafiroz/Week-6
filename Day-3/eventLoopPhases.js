@@ -1,3 +1,13 @@
+//timers phase
+//pending callback phase
+//idle/prepare phase
+//poll phase
+//check phase
+//close phase
+
+
+
+
 //Event Loop Execution Phases
 
 // Node.js runs JavaScript in a single thread using the V8 engine
@@ -26,12 +36,10 @@
 
 
 // 3. Idle / Prepare Phase (internal use):
-// Used internally by Node.js, not directly accessible in the code
-// Prepares the event loop for the next phase
+// it is not accessible directly in the code , it is Used internally by Node.js
 
-// This is a short moment where JavaScript isn’t running your code yet — it’s just Node.js + libuv getting ready for the next phase
 // idle phase- The event loop is literally idle for a tiny moment while it waits for the next poll to start.
-// prepare phase- Node.js uses this moment to prepare internal data needed for the Poll phase 
+// prepare phase- Node.js prepares internal data needed for the Poll phase 
 
 
 

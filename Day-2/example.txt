@@ -1,1 +1,2 @@
-Hello this is the first lineThis line was appended
+Hello, this is the first line
+This line was appended

@@ -1,0 +1,43 @@
+// its a pattern we can use to check if a string looks the way we expect
+// 1, Anchors
+// ^ - start of string
+// $ - end of string
+
+// 2. Character Sets (Regex)
+// [abc] → matches one character: a or b or c
+// [A-Z] → matches any uppercase letter
+// [a-z] → matches any lowercase letter
+// [0-9] → matches any digit (same as \d)
+// [^abc] → matches NOT a, b, or c (the ^ inside [] means not) except abc can take any letter
+
+// 3. Shorthand Classes (Regex)
+// \d → matches a digit (0–9)
+// \D → matches not a digit
+// \w → matches a word character (letters, digits, underscore _)
+// \W → matches not a word character
+// \s → matches whitespace (space, tab, newline)
+// \S → matches not whitespace
+
+// 4. Quantifiers (Regex)
+// * → zero or more
+// + → one or more
+// ? → zero or one (optional)
+// {n} → exactly n times
+// {n,} → at least n times
+// {n,m} → between n and m times
+
+// 5. Special Characters (Regex)
+// . → matches any single character (except newline)
+// \. → matches a literal dot (.)
+// \+ → matches a literal plus (+)
+// \? → matches a literal question mark (?)
+
+// 6. Grouping & OR (Regex)
+// (abc) → groups "abc" together
+// a|b → matches a OR b
+
+// Once we set a regular expression, we can check or manipulate strings using:
+// pattern.test(string) – quick true/false check
+// string.match(pattern) – get matched text
+// pattern.exec(string) – detailed match info
+// string.replace(pattern, replacement) – replace matches

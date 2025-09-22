@@ -67,11 +67,11 @@ app.get('/async-error', async (req, res, next) => {
 // HANDLING UNCAUGHT EXCEPTION AND REJECTIONS
 
 // Uncaught Exception
-//  Errors that happen synchronously but are not wrapped in try–catch (normal try catch can handle this error in sync)
+//  Errors that happen synchronously that are not wrapped in try–catch and it wont crashes app bcz when we throw err without try catch, express will handle it but aync will not
 // throw new Error("This is an uncaught exception");
 
 //in asynchronous-- if we throww err, it wont show any error in app until we go to that particular page where error threw. so from there, the app will crash over all
-//so this is why it is runtime err and called uncaught exception
+//so this is why it is runtime error
 //it cant handle with normal try catch bcs the callback executes later so it need .catch() or try catch inside async await
 
 // Unhandled Promise Rejection (just for async bcz promise itself async)
@@ -111,3 +111,5 @@ process.on('unhandledRejection', (reason, promise) => {
 // SIGINT
 // exit
 // warning
+
+//Why important: Prevents the app from crashing silently and allows graceful shutdown

@@ -1,6 +1,6 @@
 // STREAM
-// A stream is a event emitting object used to handle data bit by bit instead of all at once
-// it's useful for reading or writing large files or data efficiently
+// A stream is an event emitting object that lets us read or write data chunk by chunk instead of loading the whole data into memory at once
+// it's useful for reading or writing large files
 
 // there are 4 types of streams--
 
@@ -10,8 +10,8 @@
 // Transform – duplex streams that can modify data while reading/writing (e.g., compression, encryption)
 
 // Why would we use streams over other methods like fs.readFile?
-// bcz fs.readFile() loads the entire file into memory which is inefficient for large files
-// Streams process data chunk by chunk, using less memory and allowing faster start times
+// bcz fs.readFile() loads the entire file into memory which is inefficient for large files or even crash the app for very large files
+// streams uses using less memory and faster
 
 // EVENT EMITTER
 // is a built-in module that lets objects emit events and listen for them

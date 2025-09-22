@@ -1,23 +1,39 @@
-const { tokenFunction, user } = require("../utils/auth")
-
+const { user, generateToken } = require("../utils/auth")
+const { NotFoundError } = require("../utils/error")
+const bulletins = require("../utils/storage")
 
 const loginGet=(req,res)=>{
     res.render('login')
 }
 
-const loginPost=(req,res)=>{
+const loginPost=(req,res,next)=>{
     try{
      const {username,password}=req.body
-    if(username===user[0].username&&password===user[0].password){
-        res.cookie('Hiba',tokenFunction(),{httpOnly:true,maxAge:3600000})
-        res.status(200).render('profile',{user})
+     const student=user.find(u=>u.username===username && u.password===password)  //find will automatically give all other details of that person
+    if(student){
+        res.cookie('Hiba',generateToken(student),{httpOnly:true,maxAge:3600000})
+        res.status(200).render('profile',{
+            username:student.username,
+            age:student.age,
+            role:student.role,
+            id:student.id,
+            course:student.course
+        })
     }else{
-        res.status(401).json({ message: 'Invalid username or password' });
-    }
-}catch(err){
-    res.status(400).send('Something went wrong')
+        return next(new NotFoundError('Invalid username or password'))}
+    }catch(err){
+    next(err)
 }
 }
 
+const profile=(req,res)=>{
+    res.render('profile')
+}
 
-module.exports={loginGet,loginPost}
+const studentPage=(req,res)=>{
+    res.render('studentPage',{bulletins})
+}
+
+module.exports={loginGet,loginPost,profile,studentPage}
+
+

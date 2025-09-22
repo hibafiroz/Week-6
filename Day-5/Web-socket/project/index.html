@@ -3,46 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>WEBSOCKET DEMO</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="mx-auto max-w-3xl p-4">
- <div>
-    <div class="mb-4">
-      <h1 class="text-3xl font-bold ml-66">WEBSOCKET DEMO</h1>
-    </div><br>
-    <div class="mb-4">
-      <input type="text" id="message" placeholder="Enter your message" 
-             class="border-2 border-black p-2">
-      <button id="btn" class="border-2 border-black p-1 bg-gray-200 hover:bg-gray-300">Send</button>
+<body class="mx-auto max-w-3xl p-6 bg-black text-orange-400 font-sans">
+
+  <div>
+    <div class="mb-6">
+      <h1 class="text-4xl font-extrabold text-orange-500 text-center">WEBSOCKET DEMO</h1>
     </div>
-    <div id="connect" class="text-green-600"></div>
-    <div id="status" class="border-2 border-black p-3 h-40"></div>
+
+    <div class="mb-4 flex gap-2">
+      <input type="text" id="message" placeholder="Enter your message"
+             class="flex-1 border-2 border-orange-500 p-2 bg-black text-orange-400 placeholder-orange-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+      <button id="btn" class="border-2 border-orange-500 p-2 bg-orange-500 text-black font-semibold hover:bg-orange-400 transition">Send</button>
+    </div>
+
+    <div id="connect" class="mb-2 text-green-500 font-medium"></div>
+
+    <div id="status" class="border-2 border-orange-500 p-3 h-60 overflow-y-auto bg-black text-orange-400"></div>
   </div>
 
-    <script>
-      const ws=new WebSocket('ws://localhost:3000')
-      const message=document.getElementById('message')
-      const btn=document.getElementById('btn')
-      const status=document.getElementById('status')
-      const connect=document.getElementById('connect')
-      ws.onopen=()=>{
-        connect.innerHTML+='Connected to Server! <br>'
-      }
-      ws.onmessage=(msg)=>{
-        status.innerHTML+=msg.data+'<br>'
-      }
-      btn.addEventListener('click',()=>{
-        const msg=message.value
-        //while broadcasting, everyone can know who the client is, so we can send JSON
-        ws.send("Server recieved: "+JSON.stringify({
-          type:'chat',
-          user:'Hiba',
-          message:msg
-        },null,2))
-        status.innerHTML+='You sent: '+msg+'<br>'
-        msg.input=''
-      })
-    </script>
+  <script>
+    const ws = new WebSocket('ws://localhost:3000');
+    const message = document.getElementById('message');
+    const btn = document.getElementById('btn');
+    const status = document.getElementById('status');
+    const connect = document.getElementById('connect');
+
+    ws.onopen = () => {
+      connect.innerHTML += 'Connected to Server! <br>';
+    };
+
+    ws.onmessage = (msg) => {
+      status.innerHTML += msg.data + '<br>';
+      status.scrollTop = status.scrollHeight; // Auto-scroll
+    };
+
+    btn.addEventListener('click', () => {
+      const msg = message.value;
+      if (!msg) return;
+
+      ws.send(JSON.stringify({
+        type: 'chat',
+        user: 'Hiba',
+        message: msg
+      }, null, 2));
+
+      status.innerHTML += 'You sent: ' + msg + '<br>';
+      message.value = '';
+      status.scrollTop = status.scrollHeight; // Auto-scroll
+    });
+
+    
+  </script>
+
 </body>
 </html>

@@ -1,8 +1,14 @@
-//setup
-const fs = require('fs');
-const path = require('path');
+//fs.readFile        |      //fs.readdir
+//fs.writeFile       |      //fs.mkdir
+//fs.appendFile      |      //fs.rmdir
+//fs.rename          |      //fs.rm
+//fs.unlink          |
 
-const filePath = path.join(__dirname, 'data.txt');
+
+//setup
+const fs = require('fs')
+const path = require('path')
+const filePath = path.join(__dirname, 'data.txt')
 
 //fs.readFile()
 //reads the contents of a file asynchronously
@@ -56,6 +62,46 @@ const data=[
  })
 
 
+ //fs.rename()
+
+//Renames a file
+//OR moves it to a new location
+fs.rename(oldPath, newPath, callback)
+const fs = require('fs');
+
+fs.rename('oldName.txt', 'newName.txt', (err) => {
+  if (err) throw err;
+  console.log('File renamed successfully!');
+}); //this renames the file
+
+fs.rename('notes.txt', './backup/notes.txt', (err) => {
+  if (err) throw err;
+  console.log('File moved to backup folder!');
+});  //this moves the file to another location
+
+//with async await
+const fs = require('fs/promises');
+
+async function renameFile() {
+  try {
+    await fs.rename('a.txt', 'b.txt');
+    console.log('Renamed using promises');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+
+//fs.unlink()
+
+//Deletes a single file
+fs.unlink('deleteMe.txt', (err) => {
+  if (err) throw err;
+  console.log('File deleted!');
+});
+
+
+
  //fs.readdir() 
  // Read contents of a folder and is used to list all files and directories inside a given folder
 
@@ -79,7 +125,7 @@ fs.readdir('./myFolder', (err, files) => {
 [ 'file1.txt','file2.js','subFolder']
 
 // { withFileTypes: true }
-// This differentiate between files and folders
+// This differentiate between files and directory(img,docs etc)
 
 fs.readdir('./myFolder', { withFileTypes: true }, (err, items) => {
     if (err) throw err;
@@ -146,42 +192,3 @@ fs.rm(path, options, callback)
 fs.rm(path, { recursive: true, force: true }, callback)
 // recursive: true  allows deleting non-empty folders
 // force: true  ignores err like "file not found"
-
-
-//fs.rename()
-
-//Renames a file
-//OR moves it to a new location
-fs.rename(oldPath, newPath, callback)
-const fs = require('fs');
-
-fs.rename('oldName.txt', 'newName.txt', (err) => {
-  if (err) throw err;
-  console.log('File renamed successfully!');
-}); //this renames the file
-
-fs.rename('notes.txt', './backup/notes.txt', (err) => {
-  if (err) throw err;
-  console.log('File moved to backup folder!');
-});  //this moves the file to another location
-
-//with async await
-const fs = require('fs/promises');
-
-async function renameFile() {
-  try {
-    await fs.rename('a.txt', 'b.txt');
-    console.log('Renamed using promises');
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-
-//fs.unlink()
-
-//Deletes a single file
-fs.unlink('deleteMe.txt', (err) => {
-  if (err) throw err;
-  console.log('File deleted!');
-});
