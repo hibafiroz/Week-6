@@ -1,7 +1,7 @@
 //fs.readFile        |      //fs.readdir
 //fs.writeFile       |      //fs.mkdir
 //fs.appendFile      |      //fs.rmdir
-//fs.rename          |      //fs.rm
+//fs.rename          |      
 //fs.unlink          |
 
 
@@ -30,8 +30,8 @@ fs.writeFile(filePath, 'Hello, this is my new file content!', (err) => {
     console.error('Write Error:', err);
     return;
   }
-  console.log('File written successfully!');
-});
+  console.log('File written successfully!')
+})
 
 
 //fs.appendFile()
@@ -43,7 +43,7 @@ fs.appendFile(filePath, '\nThis line was added later!', (err) => {
     return;
   }
   console.log('Content appended!');
-});
+})
 
 //These are asynchronous so they don’t block the main thread
 

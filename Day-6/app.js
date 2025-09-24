@@ -4,7 +4,6 @@ const path=require('path')
 const cookie=require('cookie-parser')
 const studentRoute = require('./Routes/student-route')
 const adminRoute=require('./Routes/admin-route')
-const {user,authMiddleware}=require('./utils/auth')
 const app=express()
 const http=require('http')
 const {Server}=require('socket.io')
@@ -24,7 +23,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(cookie())
 
 app.use('/student',studentRoute)
-app.use('/admin',adminRoute)  //home il kodthningil ivda /admin venda
+app.use('/admin',adminRoute)
 
 app.get('/',(req,res)=>{
     res.render('home')
@@ -33,20 +32,8 @@ app.get('/',(req,res)=>{
 app.use(errorHandlingMiddleware)
 
 app.get('/chat',(req,res)=>{
-    const username='Hiba'
-    res.render('chat',{username})
-})
-
-io.on('connection',(socket)=>{
-    console.log('user connected',socket.id)
-    socket.broadcast.emit('user-join','A user has joined')
-    socket.on('message',(data)=>{
-        const time=new Date().toLocaleDateString()
-        io.emit('message', {...data,time:time })
-    })
-    socket.on('disconnect',()=>{
-        io.emit('user has disconnected')
-    })
+  const username='Guest'
+  res.render('chat',{username})
 })
 
 server.listen(PORT,()=>{console.log(`http://localhost:${PORT}`)})

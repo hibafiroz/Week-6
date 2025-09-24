@@ -31,7 +31,7 @@ const profile2=(req,res)=>{
 }
 
 const adminGet = (req, res) => {
-  res.render('adminPage');
+  res.render('adminPage',{message:''});
 }
 
 module.exports = { adminGet,loginGet,loginPost,profile2}

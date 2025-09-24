@@ -1,7 +1,7 @@
 // Morgan:
-//it is a logging middleware that records details about each http request like method, URL, status, and response time
+//it is a logging middleware that records details about http request like method, URL, status, and response time
 
-import morgan = require("morgan")
+const morgan = require("morgan")
 
 // Why Morgan?
 // Debugging: we can See what requests are hitting our server like method, URL, status, response time

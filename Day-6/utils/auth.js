@@ -59,7 +59,6 @@ function generateToken(student){
 const authMiddleware=(req,res,next)=>{
      try{
     const token=req.cookies?.Hiba
-    console.log(token)
     if(!token){
         return next(new NotFoundError('Login first'));
     }else{

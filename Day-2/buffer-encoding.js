@@ -1,52 +1,20 @@
 //Buffer:
-// javaScript strings are UTF-16 encoded and not suited for handling raw binary data so Node.js introduced the Buffer class
-// it is a global class used to handle raw binary data. it allow us to work with binary streams of data such as files, images or audio
-//represent an array of bytes
-//We can create them using methods like Buffer.alloc(size) or Buffer.from(data)
-// Common when working with files, streams etc
+// A buffer is a temporary storage area in memory used to handle binary data (like files, streams, images) efficiently.
 
-const buf = Buffer.from('Hello') //default = utf-8
+const buf = Buffer.from('Hello')
 console.log(buf);        //<Buffer 48 65 6c 6c 6f>
 console.log(buf.toString()) //"Hello"
 
-//Here 48 65 6c 6c 6f are hex values of ASCII codes for "Hello"
-
 //Encoding:
-
 //Encoding defines how that binary data is translated into text — the default is UTF-8,
 //but Node also supports ASCII, hex, and base64
 
 //its types:
 
-// UTF-8 - (default) supports almost all characters worldwide
+// UTF-8 - supports all characters
 // ASCII - basic English characters (0–127)
-// Base64 -used for transmitting files or images in text-based protocols.
-// Hex - represents each byte as a two-digit hexadecimal value
+// Base64 -transmit files or images in text-based protocols.
+// Hex - represents in trwo digit hexadecimal value
 
-const buff = Buffer.from('Hello World','utf-8')
-
-console.log(buff.toString('hex'));     // 48656c6c6f20576f726c64
-console.log(buff.toString('base64'));  // SGVsbG8gV29ybGQ=
-
-//Creating buffer:
-
-// From string
-const buf1 = Buffer.from('Hi', 'utf-8')
-
-// Allocate fixed size (filled with zeros)
-const buf2 = Buffer.alloc(10)
-
-// From array of bytes
-const buf3 = Buffer.from([72, 105])  //Hi
-
-
-//Reading and writing buffer:
-
-const buf4 = Buffer.alloc(5);
-buf4.write('Hello');
-console.log(buf.toString()); //Hello
-
-
-//use case of binary data
-//Encoding is needed when we deal with binary data like files,images,audio or data sent over a network. since raw binary isnt human-readable, encoding converts it into text formats we can store,transmit or display
-//For ex a file read into a Buffer can be encoded as UTF-8 for text, base64 for safely transmitting an image in JSON or HTML or hex when representing data in debugging or cryptography
+//Encoding is needed when we deal with binary data like files,images,audio or data sent over a network.
+// since raw binary isnt human-readable, encoding converts it into text formats we can store,transmit or display

@@ -6,8 +6,6 @@
 //close phase
 
 
-
-
 //Event Loop Execution Phases
 
 // Node.js runs JavaScript in a single thread using the V8 engine
@@ -20,7 +18,6 @@
 // Executes callbacks scheduled by:
 // setTimeout()
 // setInterval()
-// These callbacks only run if their timer has expired (even if it is 0, it waits for this phase)
 
 //setTimeout(,1000) does not guarantee it will run exactly after 1 second. bcz --
 //--the callback is placed in the Timers Phase queue after the delay, and runs when the event loop is free. If the loop is busy, it’ll be delayed even more
@@ -30,15 +27,14 @@
 //2. Pending callBack phase
 //Some async operations didnt finish in the right phase last time
 //instead of losing them, Node saves them here for the next cycle
-// Pending Callbacks Phase runs them now
 //ex: Error callbacks from failed network requests
 
 
 
-// 3. Idle / Prepare Phase (internal use):
+// 3. Idle / Prepare Phase:
 // it is not accessible directly in the code , it is Used internally by Node.js
 
-// idle phase- The event loop is literally idle for a tiny moment while it waits for the next poll to start.
+// idle phase- The event loop is idle for a tiny moment while it waits for the next poll to start.
 // prepare phase- Node.js prepares internal data needed for the Poll phase 
 
 
@@ -49,13 +45,7 @@
 // This includes things like:
 // Reading a file (fs.readFile)
 // network request
-
-fs.readFile("data.txt", "utf-8", (err, data) => {
-    console.log("File content:", data); // This runs in poll phase
-});
-
-// If nothing is ready, Node.js might wait(block) here for a short while until:
-// New I/O events finish (file read completes, network responds)
+// If nothing is ready, Node.js wait here for a short while until New I/O events finish
 // If a timer is about to expire, it wont wait ,it’ll move on to the Timers phase in the next tick.
 // it is called heart of loop Because most asynchronous work (network requests, file reads, DB calls) is handled right here
 
@@ -63,9 +53,6 @@ fs.readFile("data.txt", "utf-8", (err, data) => {
 
 //I/O polling:
 //, I/O polling is the mechanism present inside the poll phase that waits for I/O operations to finish and then executes their callbacks when theyre ready
-
-//File I/O (like fs.readFile) → handled by thread pool (since OS APIs are blocking)
-// Network I/O (like sockets, HTTP) → handled by I/O polling (OS notifies libuv)
 
 
 
@@ -94,7 +81,7 @@ fs.readFile(__filename, () => {
 // socket.on('close', …)
 // server.on('close', …)
 
-//These phases are of callback queue present in libuv and after Each phase completion, it visits two microtask queue(nextTick,promise).
+// after Each phase completion, it visits two microtask queue(nextTick,promise).
 
 ex:
 setImmediate(()=>{
@@ -115,13 +102,12 @@ process.nextTick(()=>{
 
 
 //Thread Pool (fs module,dns module,crypto module)
-//The Thread Pool is a set of background worker threads managed by libuv to handle heavy,
-// non-blocking tasks (like file I/O, DNS, and crypto) outside the main event loop
-//This keeps Node.js fast and non-blocking even though it runs JavaScript on a single main thread
+//The Thread Pool is a set of background worker threads managed by libuv to handle heavy, blocking tasks outside the main event loop
+//This keeps Node.js fast and non-blocking
 
 //By default, thread pool has 4 worker threads
 //This size is controlled by the environment variable:
-//You can increase it up to a maximum of 128 threads 
+//we can increase it up to a maximum of 128 threads 
 //ex if i want to set 8-- 
 
 UV_THREADPOOL_SIZE=8 node app.js

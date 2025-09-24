@@ -1,5 +1,4 @@
 //CLUSTER
-//can be used to run 
 //Node.js runs only on 1 CPU core.
 // Even if our computer has 8 cores Node.js uses just one
 // So if many users send requests, that single core gets overloaded
@@ -23,13 +22,7 @@ if (cluster.isPrimary) {   //means this is the main process(not a worker)
     cluster.fork()
   }
 
-  // if any worker fails, create one
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`Worker ${worker.process.pid} died with code ${code}`);
-    cluster.fork();
-  })
-
-} else {  //This block runs in worker processes. Each worker runs an Express server on port 3000
+  //This block runs in worker processes. Each worker runs an Express server on port 3000
   // Worker process: create Express server
   const express = require('express');
   const app = express();

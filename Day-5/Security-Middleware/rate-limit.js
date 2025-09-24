@@ -1,6 +1,6 @@
-Rate Limiting:
+// Rate Limiting:
 
-//is a technique to restrict how many requests a client can make to your server in a given time.
+//is a technique to restrict how many requests a client can make to server in a given time
 // Why?
 // To prevent brute-force attacks (e.g., repeatedly guessing passwords)
 // To protect server resources from being overloaded

@@ -1,16 +1,13 @@
 //why JWT?
-//The server does not need to remember sessions, the token is stored on the browseer
-// On each request the server juz verifies the tokens signature, no session DB needed
+//Its a secure way of transmitting data between client and server
+//When a user logs in, the server verifies their credentials and crates a JWT.
+//The client stores the token and sends it with each request.
+//The server verifies the token to allow access to protected resources without keeping server-side sessions
+//it contains a header, payload and signature
 
-// User logs in- server verifies
-// Server creates token- sends it to client.
-// Client stores token
-// Client makes requests- token goes with request
-// Server verifies token.
 
 //Who creates the JWT(token)?
 //The server side creates the token
-//The server sends the token to the user browser or frontend
 //The browser can store it in two main ways:
 // 1. Cookies: automatically sent with each request.
 // 2. Local Storage/JSON object: frontend manually attaches it in requests.
@@ -21,10 +18,8 @@
 // Cookies: browser auto-includes it
 // Authorization Header: "Authorization: Bearer <token>"
 
-
 //A JWT looks like this:
 xxxxx.yyyyy.zzzzz
-
 
 //It has 3 parts, separated by dots (.)
 // 1. Header (xxxxx)
@@ -36,15 +31,14 @@ xxxxx.yyyyy.zzzzz
   "typ": "JWT"
 }
 //HS256: 
-// One secret key is used. (key is a a secret string)
+// HS256 is a signing algorithm to sign token using a secret key
 // That same key is used for both-
 // Signing (when the server creates the token) and Verifying (when the server checks if the token is valid)
 // it is symmetric means both sides use the same key
 
-//When the server creates a token, it takes:
-// the payload plus this secret key and runs them through the HS256 algorithm to make a signature
-// Later when someone sends the token back, the server uses the same secret key to check the signature
-// if the signature matches token is valid. if not token is fake
+//how token create
+//the server uses the payload and a secret key with HS256 to make a signature.
+// Later the server verifies this signature with the same key—if it matches, the token is valid; if not, it’s fake.
 
 // 2. Payload (yyyyy)
 // it Contains the actual data (claims)
@@ -60,7 +54,6 @@ xxxxx.yyyyy.zzzzz
 
 // b. Public Claims (custom but common):
 //These are custom claims, but they are meant to be understood by everyone using that system
-//if multiple systems agree on certain claims, they all understand these keys.
 //ex:
 {
   "id": 123,
@@ -71,17 +64,13 @@ xxxxx.yyyyy.zzzzz
 
 //c. Private Claims (custom, only for our app)
 // These are custom claims that are only understood inside our own system.
-// Ex:
-{ "commonId": "923" }
-//Only my app knows what commonId means, it wont make sense to others
 
 //3. Signature (zzzzz)
 //verifies data hasnt been changed (security)
 //Ensures the token wasnt tampered with.
 hash( header + payload + secret_key )
-//The server uses the secret key to sign it
-//So if someone tries to edit the payload the signature wont match anymore and the server rejects it
 
+// The signature is added to the token: header.payload.signature.
 
 //JWT creation:
 
@@ -112,40 +101,3 @@ jwt.verify(token, secretKey, [options], [callback])
 //if it uses RS256- pass the public key.
 //options- maxAge,issuer,algorithms,audience
 //callBack-  if we provide a callback- async style. if not, it throws an error when invalid (sync style)
-
-
-//JWT in LocalStorage:
-// Step 1: User logs in
-// User submits username/password.
-// Server checks them.
-// If valid → server creates a JWT and sends it back as JSON.
-res.json({ token });
-
-// Step 2: Client stores JWT
-// The browser (frontend JS) stores it in localStorage:
-localStorage.setItem("token", data.token);
-
-//Step 3: Client sends JWT back
-// Whenever client makes an API call (like /profile),
-// it puts the token inside HTTP headers:
-fetch("/profile", {
-  method: "GET",
-  headers: {
-    "Authorization": "Bearer " + localStorage.getItem("token"),
-    "Content-type" : "application/json"
-  }
-});
-
-//Step 4: Server verifies JWT
-function authMiddleware(req, res, next) {
-  const authHeader = req.headers["authorization"];  //or req,headers.authoization , in authoraization it has data
-  const token = authHeader && authHeader.split(" ")[1]; // 1(index) for token and 0 for bearer
-  if (!token) return res.status(401).json({ message: "Token not found" })
-  try {
-    const decoded = jwt.verify(token, secretKey);
-    req.user = decoded; // attach user info
-    next();
-  } catch (err) {
-    return res.status(403).json({ message: "Invalid token" });
-  }
-}

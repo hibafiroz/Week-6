@@ -2,32 +2,20 @@
 // A stream is an event emitting object that lets us read or write data chunk by chunk instead of loading the whole data into memory at once
 // it's useful for reading or writing large files
 
-// there are 4 types of streams--
-
-// Readable – streams you can read from (e.g., fs.createReadStream)
-// Writable – streams you can write to (e.g., fs.createWriteStream)
-// Duplex – streams that are both readable and writable (e.g., TCP socket)
-// Transform – duplex streams that can modify data while reading/writing (e.g., compression, encryption)
-
 // Why would we use streams over other methods like fs.readFile?
 // bcz fs.readFile() loads the entire file into memory which is inefficient for large files or even crash the app for very large files
 // streams uses using less memory and faster
-
-// EVENT EMITTER
-// is a built-in module that lets objects emit events and listen for them
-// and we listen to them using .on()
 
 // data - A chunk of data is available
 // end - end event fires after all the chunks are sent — it tells us the file is fully read
 // error - Something went wrong
 // close - The stream is closed
 
-
 //fs.createReadStream?
 //it's a method from the fs module that lets us read a file in chunks instead of loading the whole file into memory
 
 //Syntax
-const fs = require('fs');
+const fs = require('fs')
 //parameters- path,encoding,highWaterMark(size of each chunk in bytes)
 const readStream = fs.createReadStream('filename.txt', { encoding: 'utf8', highWaterMark:16 });//read 16 bytes
 
@@ -36,28 +24,14 @@ readStream.on('data', (chunk) => {
 });
 
 readStream.on('end',() => {
-  console.log('Done reading file.');
+  console.log('Done reading file.')
 });
 
 readStream.on('error',(err) => {
-  console.error('Error:', err);
-});
+  console.error('Error:', err)
+})
 
 //default chunk size is-- 64kb
-
-
-//system stores data in binary FormData(01001010), using utf-8 we convert that into readable form
-//A Buffer is a built-in object that is used to store and manipulate binary data directly — before converting it to readable strings using encodings like UTF-8
-
-
-//Reading without utf8:
-const readStream = fs.createReadStream('example.txt');
-
-readStream.on('data', (chunk) => {
-  console.log('Binary Buffer:', chunk);         // raw buffer
-  console.log('As string:', chunk.toString());  // convert manually
-});
-
 
 //CreateWriteStream
 //its a method used to write data to a file in chunks

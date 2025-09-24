@@ -1,4 +1,4 @@
-// Multer is a middleware for handling file uploads in Node.js applications.
+// Multer is a middleware for handling file uploads in Node
 // Without Multer, Express doesnt understand file uploads directly
 
 //setting up:

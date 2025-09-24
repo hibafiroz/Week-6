@@ -1,17 +1,20 @@
-//1. WORKER THREAD:
-
-//A Worker Thread is a way in Node.js to run JavaScript code in parallel on multiple threads.
+//thread pool (via libuv) to handle I/O operations like file reading etc
+//Worker Threads are used for CPU-intensive tasks like Image processing, Math calculations etc
 //worker pool is created manually by us but thread pool is behind the scene that handles node
 
+//1. WORKER THREAD:
 
-//Node creates separate threads inside the same process
-//Each worker has its own event loop + V8 engine context
-//They do not share memory directly except through SharedArrayBuffer
+//A Worker Thread is a way in Node.js to run JavaScript code in parallel
+// it runs in the same process
+// it gets its own V8 instance
+// it gets its own event loop
+//They do not share memory directly
+// But since it’s still in the same process, we can share memory between them using SharedArrayBuffer
+// Communication is done using message passing
 
-// Communication is done using message passing(like postMessage and onmessage)
-//Used for CPU-heavy tasks like:
-// Math calculations
-// Image processing
+// What is a Worker Pool?
+// A worker pool is a collection of worker threads that we can reuse
+// Instead of creating a new worker every time(which is expensive), we Create a fixed number of workers in a pool.
 
 //To create worker thread, node js provides us a built in module called worker_threads
 
@@ -64,16 +67,4 @@ parentPort.postMessage('Done!');
 const { workerData, parentPort } = require('worker_threads');
 const {num}=workerData
 console.log(num); // 25
-parentPort.postMessage('Done!');
-
-// When we create a Worker Thread:
-// it runs in the same process as the main thread
-//lets us run JavaScript code in separate threads
-// it gets its own V8 instance
-// it gets its own event loop
-// But since it’s still in the same process, we can share memory between them using SharedArrayBuffer
-
-// What is a Worker Pool?
-// A worker pool is a collection of worker threads that you can reuse to perform CPU-intensive tasks in parallel.
-// Instead of creating a new worker every time (which is expensive), you:
-// Create a fixed number of workers in a pool.
+parentPort.postMessage('Done!')

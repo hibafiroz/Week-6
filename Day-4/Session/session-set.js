@@ -1,4 +1,4 @@
-// A session stores data on the server-side.
+// session helps the server remember who a user is
 // The server creates a session object and gives the client a session ID (often kept inside a cookie). 
 // On each request, the browser sends this session ID, and the server looks up the session data
 // Sessions are more secure and can store larger, sensitive information such as login state or shopping cart data
@@ -7,19 +7,10 @@
 //The server needs a place to keep session data. This can be:
 //Memory (default in express-session)
 //Data stored in RAM
-//Fast but not good for production (lost when server restarts)
-
 //Database (eX- MongoDB, MySQL)
-//Sessions stored safely in a DB and can persist across server restarts
-
 //Another store (EX- Redis)
-//Used for high-performance apps, Better scaling when multiple servers are used.
-
 
 //HOW TO CREATE?
-
-//We use express-session middleware.
-//Why express-session is used? Bcz HTTP is stateless So it forgets the user. express-session lets the server remember the user
 
 // Steps:
 // 1. Creates session data
@@ -60,11 +51,11 @@
 // Time(in ms) before cookie expires
 
 //Two types of cookies based on max-age
-//1. Session Cookie
+//a. Session Cookie
 // No max-age or expires is set. The cookie only lasts until the browser is closed.
 // Used for temporary sessions (ex- login sessions) no need to write any max-age, by default it sets session cookie
 
-//2.Persistent Cookie
+//b.Persistent Cookie
 
 // expires is set. Survives even after browser restarts until the time is up
 

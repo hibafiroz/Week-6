@@ -1,36 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Chat</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <title>Group Chat</title>
   <script src="/socket.io/socket.io.js"></script>
+  <sc src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-black text-white flex flex-col items-center h-screen">
-  <h1 class="text-3xl font-bold text-purple-500 mt-6">Chat Room</h1>
-  <div id="messageDiv" class="bg-neutral-900 border-2 border-purple-800 rounded-lg w-4/5 max-w-2xl h-3/5 overflow-y-auto p-4 mt-6 shadow-lg shadow-purple-800/30"></div>
-  <div class="flex w-4/5 max-w-2xl mt-4">
-    <input id="inp" class="flex-1 p-3 border-2 border-purple-800 rounded-l-md bg-neutral-950 text-white placeholder-gray-400" placeholder="Type message"/>
-    <button onclick="sendMsg()" class="bg-purple-700 hover:bg-purple-500 px-6 py-3 rounded-r-md text-white">Send</button>
- 
+<body class="bg-gray-900 text-white flex flex-col h-screen">
 
- <script>
-  const socket=io() // connect to server
-  const username="<%=username%>"
-  const messageDiv=document.getElementById('messageDiv')
-  const inp=document.getElementById('inp')
+  <div class="p-4 flex gap-2">
+    <input type="text" id="roomInput" placeholder="Room name" class="p-2 rounded text-black">
+    <button id="joinBtn" class="bg-purple-600 px-4 rounded">Join Room</button>
+  </div>
 
-  function sendMsg(){
-    const message=inp.value
-    socket.emit('message',{sender:username,message})
-    inp.value=''
-  }
+  <div class="flex-1 overflow-auto p-4" id="chatBox"></div>
 
-  socket.on('message',(data)=>{
-    const msg2=document.createElement('div');
-    msg2.textContent=`${data.time}-${data.sender}:${data.message}`
-    messageDiv.appendChild(msg2)
-  })
+  <form id="chatForm" class="flex p-4 bg-gray-800">
+    <input type="text" id="msgInput" class="flex-1 p-2 rounded text-black" placeholder="Type a message" autocomplete="off"/>
+    <button type="submit" class="ml-2 bg-purple-600 px-4 rounded">Send</button>
+  </form>
 
-  </script>
+   
 </body>
 </html>

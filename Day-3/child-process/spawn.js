@@ -1,9 +1,7 @@
 const { spawn } = require('child_process');
 
 // Command: node child.js 42
-const cp = spawn(
-  'node',                        // command
-  ['child-spawn.js', '42'],         // args
+const cp = spawn('node',['child-spawn.js', '42'],
   {
     cwd: __dirname,           // working directory
     env: { ...process.env, MY_ENV: 'HelloWorld' }, // custom env var
@@ -11,7 +9,7 @@ const cp = spawn(
     detached: false,          // true = child lives even if parent dies
     stdio: ['pipe', 'pipe', 'pipe'] // stdin, stdout, stderr
   }
-);
+)
 
 // Handle normal output (stdout is a stream)
 cp.stdout.on('data', (data) => {                  //The "data" event is the built-in event name for readable streams
@@ -32,3 +30,7 @@ cp.on('spawn', () => console.log('Child process spawned! PID:', cp.pid));
 cp.on('exit', (code) => console.log('Child exited with code:', code));
 cp.on('close', (code) => console.log('Child closed with code:', code));
 cp.on('error', (err) => console.error('Child process error:', err));
+
+// spawn() launches a new child process to run
+//it does not buffer the whole output, it gives a stream, chunk by chunk.
+// Best for large outputs

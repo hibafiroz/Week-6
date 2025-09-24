@@ -1,22 +1,15 @@
-const { exec } = require('child_process');
+const { exec } = require('child_process')
 
 // Run: node child-exec.js 42
-exec(
-  'node child-exec.js 42',   // command as a full string
-
-  // options
-  {
-    env: { ...process.env, MY_ENV: 'HelloWorld' }, // custom environment variables
-    // cwd: __dirname,   // optional: working directory
-  },
-
-  // callback (runs after child process finishes)
-  (error, stdout, stderr) => {
+exec('node child-exec.js 42',(error, stdout, stderr) => { //dir- list files in folder or node app.js - run a Node.js script
     if (error) {
       console.error('Exec error:', error);
-      return;
+      return
     }
-    console.log('STDOUT:\n', stdout);
-    console.log('STDERR:\n', stderr);
+    console.log('STDOUT:\n', stdout)
+    console.log('STDERR:\n', stderr)
   }
-);
+)
+
+// Runs a command in a shell and buffers the output.
+// Good for small commands

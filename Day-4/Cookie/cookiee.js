@@ -7,7 +7,6 @@
 // it is sent with every request to the server
 // they are limited in size (<= 4KB) and 
 // are less secure since they can be modified by the client
-//When a site (say example.com) sets a cookie, that cookie is sent back only to that same domain by the browser, cannot be used by other site.
 
 
 //WHO CREATES COOKIES?

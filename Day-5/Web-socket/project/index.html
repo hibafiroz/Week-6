@@ -25,24 +25,23 @@
   </div>
 
   <script>
-    const ws = new WebSocket('ws://localhost:3000');
-    const message = document.getElementById('message');
-    const btn = document.getElementById('btn');
-    const status = document.getElementById('status');
-    const connect = document.getElementById('connect');
+    const ws=new WebSocket('ws://localhost:3000')
+    const message=document.getElementById('message')
+    const btn=document.getElementById('btn')
+    const status=document.getElementById('status')
+    const connect=document.getElementById('connect')
 
-    ws.onopen = () => {
-      connect.innerHTML += 'Connected to Server! <br>';
+    ws.onopen=()=>{
+      connect.innerHTML+='Connected to Server! <br>'
     };
 
-    ws.onmessage = (msg) => {
-      status.innerHTML += msg.data + '<br>';
-      status.scrollTop = status.scrollHeight; // Auto-scroll
+    ws.onmessage=(msg)=>{
+      status.innerHTML+=msg.data + '<br>';
     };
 
-    btn.addEventListener('click', () => {
-      const msg = message.value;
-      if (!msg) return;
+    btn.addEventListener('click',()=>{
+      const msg = message.value
+      if (!msg) return
 
       ws.send(JSON.stringify({
         type: 'chat',
@@ -50,13 +49,9 @@
         message: msg
       }, null, 2));
 
-      status.innerHTML += 'You sent: ' + msg + '<br>';
-      message.value = '';
-      status.scrollTop = status.scrollHeight; // Auto-scroll
-    });
-
-    
+      status.innerHTML += 'You sent: '+msg +'<br>'
+      message.value = ''
+    })
   </script>
-
 </body>
 </html>

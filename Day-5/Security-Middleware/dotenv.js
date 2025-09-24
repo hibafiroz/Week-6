@@ -1,13 +1,6 @@
 //Dotenv:
 //it helps manage environment variables securely by loading them from a .env file into process.env
-// Instead of hardcoding sensitive values (like database passwords, API keys, JWT secrets),
-// we keep them in a separate file that is not pushed to GitHub.
-
-//why dotenv?
-//Security: Keep secrets out of code
-// Config management:                              
-// Convenience: Easy to update configs without touching source code like if i want to change port 3000 to 5000 we dont need to edit code, juz update .env
-
+// instead of hardcoding sensitive values, we keep them in a separate file that is not pushed to GitHub.
 
 //example:
 // .env file

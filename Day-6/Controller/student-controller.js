@@ -1,7 +1,5 @@
 const { user, generateToken } = require("../utils/auth")
 const { NotFoundError } = require("../utils/error")
-const bulletins = require("../utils/storage")
-
 const loginGet=(req,res)=>{
     res.render('login')
 }
@@ -30,10 +28,6 @@ const profile=(req,res)=>{
     res.render('profile')
 }
 
-const studentPage=(req,res)=>{
-    res.render('studentPage',{bulletins})
-}
-
-module.exports={loginGet,loginPost,profile,studentPage}
+module.exports={loginGet,loginPost,profile}
 
 

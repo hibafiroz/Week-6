@@ -34,3 +34,6 @@ cp.on('spawn', () => console.log('Child process forked! PID:', cp.pid));
 cp.on('exit', (code) => console.log('Child exited with code:', code));
 cp.on('close', (code) => console.log('Child closed with code:', code));
 cp.on('error', (err) => console.error('Child process error:', err));
+
+// fork() is a special version of spawn() used to run another Node.js script as a child process.
+// It automatically sets up a communication channel between parent and child using messages.
