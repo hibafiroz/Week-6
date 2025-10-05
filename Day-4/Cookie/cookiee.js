@@ -67,16 +67,6 @@
 // thats why we use cookies with HttpOnly: true, so even if XSS runs, attackers cant read sensitive cookies
 
 
-// | Feature       | Cookie (Client-side)     | Session (Server-side)              |
-// | ------------- | ------------------------ | ---------------------------------- |
-// |   Storage     | Browser                  | Server                             |
-// |   Data type   | Small info (4KB)         | Large/complex data                 |
-// |   Security    | Less secure (modifiable) | More secure (hidden from client)   |
-// |   Lifetime    | Until expiry set         | Until logout/timeout/browser close |
-// |   Best use    | Preferences, remember-me | Authentication, shopping cart      |
-
-
-
 //Types of authentication approches:
 
 //1. Statefull Authentication
@@ -86,33 +76,6 @@
 //the server creates a session object and stores it, while the browser just holds a session ID in a cookie. 
 // Each request the server checks that ID and fetches our session.
 
-//1. Login
-// we type username + password
-// Server checks them in the database
-// if correct, server creates a session objct
-session = {
-  id: "abc123xyz",   // unique session ID
-  userId: 42,        // user id
-  role: "admin",
-  cart: [1, 4, 6]    // maybe your shopping cart
-}
-
-//2. Session ID -> Cookie
-
-// Server sends a session ID to browser and stores in cookie
-// ex:
-Set-Cookie: connect.sid=abc123xyz; HttpOnly; Secure
-// our browser stores it automatically
-
-//3. Next Requests
-// When we visit /profile, the browser automatically sends the cookie back:
-// connect.sid=abc123xyz
-// Server looks up that ID and finds our session obj. now it knows who we are.
-
-//4. Expiration
-// Sessions expire after some time like 30min
-// When expired, server deletes it and we must log in again
-
 //advantage: its Secure- Only session ID is in the browser, real data is safe on the server.
 //Easy logout: Server can just delete the session
 
@@ -121,8 +84,6 @@ Set-Cookie: connect.sid=abc123xyz; HttpOnly; Secure
 //To fix this, we need--
 // Sticky sessions (always send us to the same server)
 // Or a shared store (like Redis) so all servers can see our sessions
-
-
 
 //2. Stateless Authentication (JWT)
 

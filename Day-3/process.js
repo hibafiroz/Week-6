@@ -45,7 +45,7 @@ const name = args[0] || user; // Use CLI name or env name
 
 //3. Node decides Module system and entry script:
 // CommonJS is the default if our file has a .js extension and no "type": "module" in package.json and it is synchrornous
-// ESM is used if: 
+// ESM is used if:
 // file has a .mjs extension or
 // package.json has "type": "module"
 
@@ -62,16 +62,16 @@ const name = args[0] || user; // Use CLI name or env name
 
 //5. Event loop takes over:
 //Event loop phases
-// Timers phase 
+// Timers phase
 // pending callbacks phase 
+//IDLE/PREPARE PHASE
 // Poll phase 
 // Check phase 
 // Close callbacks phase 
 // Event loop repeats these phases until theres nothing left to do
 
 //6. callbacks return to JS:
-//When libuv finishes an async task:
-// it tells Node that the callback is ready
+//When libuv finishes THE async task:
 // Node pushes the callback onto the JavaScript call stack
 // JS engine executes it like a normal function
 

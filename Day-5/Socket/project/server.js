@@ -8,14 +8,16 @@ const io=new Server(server)
 const path=require('path')
 app.use(express.static(path.join((__dirname,'public'))))
 
-io.on('connection',(socket)=>{
+const cnsp=io.of('/namespace') //custom namespace, and we use cnsp wherever we use io
+
+cnsp.on('connection',(socket)=>{
     console.log('user connected')
     socket.broadcast.emit('message',`A user connected with ID:  ${socket.id}`)
     socket.on('message',(data)=>{
-        io.emit('message',`User: ${data}`)
+        cnsp.emit('message',`User: ${data}`)
     })
     socket.on('disconnect',()=>{
-        io.emit('message',`User disconnected`)
+        cnsp.emit('message',`User disconnected`)
     })
 })
 
@@ -26,3 +28,7 @@ app.get('/', (req, res) => {
 server.listen(3010,()=>{
     console.log('http://localhost:3010')
 })
+
+
+//io.emit(...) is just a shorthand for io.sockets.emit(...)
+//socket.broadcast.emit("event", data) = send to all other connected clients, but NOT back to the sender

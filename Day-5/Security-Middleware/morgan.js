@@ -30,4 +30,3 @@ app.use(morgan('dev'));
 //'tiny': Minimal info like GET / 200 13 - 50
 //'common': Standard Apache style like ::1 - [09/Sep/2025:10:30:00 +0530] "GET /index.html HTTP/1.1" 200 150
 //'combined': Like 'common' but with more details like ::1 - - [09/Sep/2025:10:30:00 +0530] "GET /index.html HTTP/1.1" 200 150 "-" "Mozilla/5.0"
-

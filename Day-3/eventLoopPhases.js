@@ -74,7 +74,6 @@ fs.readFile(__filename, () => {
 //why? bcz File read finishes and Poll phase ends and Check phase runs setImmediate() first, Then the loop starts again and Timers phase runs setTimeout()
 
 
-
 // 6. Close Callbacks Phase
 
 // This phase executes callbacks for closed handles, like:

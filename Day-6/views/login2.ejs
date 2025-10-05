@@ -6,54 +6,73 @@
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="h-screen bg-black flex justify-center items-center font-sans">
-  <form action="/admin/login" method="post" class="bg-gray-900 p-10 rounded-2xl shadow-2xl w-96 flex flex-col space-y-6">
+<body class="h-screen bg-gradient-to-br from-purple-900 via-black to-purple-900 flex justify-center items-center font-sans">
+  <form action="/admin/login" id="form" method="post" class="bg-gray-900 p-10 rounded-2xl shadow-2xl w-96 flex flex-col space-y-6">
     <h2 class="text-3xl font-bold text-purple-400 text-center mb-4">Admin Login</h2>
     <div class="flex flex-col">
       <label for="username" class="text-gray-300 mb-1">Username</label>
       <input type="text" name="username" id="username" placeholder="Enter your username" class="px-4 py-2 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+      <p id="usernameFeedback" class="text-red-500"></p>
     </div>
 
     <div class="flex flex-col">
       <label for="password" class="text-gray-300 mb-1">Password</label>
-      <input type="password" name="password" id="password" placeholder="Enter your password"
-             class="px-4 py-2 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+      <input type="password" name="password" id="password" placeholder="Enter your password" class="px-4 py-2 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+      <p id="passwordFeedback" class="text-red-500"></p>
     </div>
 
-    <button type="submit" class="bg-purple-700 text-white font-semibold py-2 rounded-lg hover:bg-purple-600 transition duration-300 shadow-md">
+    <button type="submit" class="bg-purple-700 text-white font-semibold py-2 rounded-lg hover:bg-purple-900  transition duration-700  shadow-md">
       Login
     </button>
+    <p id="feedback" class="text-red-500"></p>
   </form>
+<script>
+const username = document.getElementById('username')
+const usernameFeedback = document.getElementById('usernameFeedback')
+const password = document.getElementById('password')
+const passwordFeedback = document.getElementById('passwordFeedback')
+const feedback = document.getElementById('feedback')
+const form = document.getElementById('form')
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault()
+
+  // clear old feedback messages
+  usernameFeedback.textContent = ''
+  passwordFeedback.textContent = ''
+  feedback.textContent = ''
+
+  // clear previous validation classes
+  username.classList.remove('border-red-500', 'border-green-500')
+  password.classList.remove('border-red-500', 'border-green-500')
+
+  const usernamePattern = /^[A-Za-z ]+$/
+  const passwordPattern = /^\d{6,}$/
+  let isValid = true
+
+  if (!username.value && !password.value) {
+    feedback.textContent = 'Please fill the form'
+    isValid = false
+    return
+  }
+
+  if (!usernamePattern.test(username.value)) {
+    usernameFeedback.textContent = 'Username can only have letters and spaces'
+    username.classList.add('border-red-500')
+    isValid = false
+  }
+
+  if (!passwordPattern.test(password.value)) {
+    passwordFeedback.textContent = 'Password should be at least 6 digits'
+    password.classList.add('border-red-500')
+    isValid = false
+  } 
+
+  if (isValid) {
+    form.submit()
+  }
+})
+</script>
+
 </body>
 </html>
-
- <!-- <script>
-       const username=document.getElementById('username')
-       const password=document.getElementById('password')
-       const feedback=document.getElementById('feedback')
-       const form=document.getElementById('form')
-       form.addEventListener('submit',(e)=>{
-        e.preventDefault()
-      const usernamePattern=/^[A-Za-z ]+$/
-       const passwordPattern=/^\d{6,}$/
-       
-       if(!username.value||!password.value){
-        feedback.textContent='Plesae fill all field'
-        feedback.className='text-red-600'
-        return
-       }
-
-       if(!usernamePattern.test(username.value)){
-        feedback.textContent='Name can only have letters and spaces'
-        feedback.className='text-red-600'
-        return
-       }
-
-       if(!passwordPattern.test(password.value)){
-        feedback.textContent='Password should be atleast 6 digits'
-        feedback.className='text-red-600'
-        return
-       }
-       feedback.textContent='form submitting'
-       feedback.className="text-red-500"
-       }) -->

@@ -5,7 +5,6 @@
 //The server verifies the token to allow access to protected resources without keeping server-side sessions
 //it contains a header, payload and signature
 
-
 //Who creates the JWT(token)?
 //The server side creates the token
 //The browser can store it in two main ways:
@@ -66,6 +65,7 @@ xxxxx.yyyyy.zzzzz
 // These are custom claims that are only understood inside our own system.
 
 //3. Signature (zzzzz)
+//the server uses the payload and a secret key with HS256 to make a signature.
 //verifies data hasnt been changed (security)
 //Ensures the token wasnt tampered with.
 hash( header + payload + secret_key )

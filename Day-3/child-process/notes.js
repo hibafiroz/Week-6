@@ -1,6 +1,8 @@
 // CHILD PROCESSES
 // A child process is a separate program that runs outside of main process but can be created and controlled by it
 // It allows Node.js to Perform heavy tasks without blocking the main event loop
+// has its own memory space,
+// Its own V8 engine instance
 
 // It has 4 main methods:
 

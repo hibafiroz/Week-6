@@ -41,25 +41,34 @@
 
 
 // What are Rooms?
-// A room = a private channel inside Socket.IO where A socket can join or leave
+// A room is a subgroup of a namespace where sockets can join or leave.
 //it is identified by a string name and the server can emit messages only to members of that room
 // Each socket automatically has a private room named by its socket.id
 
+//What is a Namespace?
 
-// How it works:
-// Join a room
-// Client asks → Server calls
-// socket.join("roomName")
+//is a way to create separate communication channels on the same Socket.IO server.
+// By default, all clients connect to the root namespace /, but we can define custom namespaces like /chat or /notifications.
+// Each namespace has its own connection, events, and listeners, so messages in one namespace don’t interfere with others.
+// It’s useful for organizing code, reducing unnecessary traffic
 
-// Send message to room
-// Server sends only to that room
-// io.to("roomName").emit("event", data)
 
-// Exclude sender (broadcast to others in room)
-// socket.to("roomName").emit("event", data)
+// Default namespace ("/")
+io.on("connection", (socket) => {
+  console.log("User connected to default namespace");
+});
+// Connect to default namespace
+const socket1 = io(); 
 
-// Leave a room
-// socket.leave("roomName")
 
-// Private message (use socket’s unique id)
-// io.to(socketId).emit("privateMessage", data)
+// Custom namespace ("/chat")
+const chat = io.of("/chat");
+chat.on("connection", (socket) => {
+  console.log("User connected to /chat namespace");
+});
+// Connect to custom namespace
+const socket2 = io("/chat");
+
+// Now, socket1 only gets events from / namespace.
+// socket2 only gets events from /chat.
+

@@ -4,7 +4,7 @@
 
 //1. WORKER THREAD:
 
-//A Worker Thread is a way in Node.js to run JavaScript code in parallel
+//A Worker Thread is a way in Node.js to run JavaScript code in parallel without creating separate processes.
 // it runs in the same process
 // it gets its own V8 instance
 // it gets its own event loop

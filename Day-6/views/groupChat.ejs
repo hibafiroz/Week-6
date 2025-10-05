@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Group Chat</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-black via-purple-950 to-black text-white font-sans flex flex-col items-center p-6 min-h-screen">
+
+      <div class="flex justify-between items-center mt-4 py-2 px-4 w-full max-w-5xl text-2xl bg-gradient-to-r from-purple-600 via-pink-500 to-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]">
+ <h1 class="text-2xl font-bold text-white"><%= groupName %></h1>
+  <div class="flex items-center gap-4">
+        <!-- Back link -->
+        <a href="/student/profile" 
+          class="text-sm font-medium px-3 py-1 rounded hover:bg-black/50 transition">
+          Back to Profile
+        </a>
+        <!-- Profile icon -->
+        <a href="/student/profile" class="block">
+          <img 
+            src="/photos/<%= photo %>" 
+            alt="Profile" 
+            class="w-10 h-10 rounded-full border-2 object-cover">
+          
+        </a>
+      </div>
+</div><br>
+
+  <div id="chatBox" class="w-full max-w-2xl h-96 bg-black border border-purple-700 rounded-lg p-4 mb-4 overflow-y-auto flex flex-col gap-2"></div>
+  <div class="w-full max-w-2xl flex gap-2">
+    <input
+      type="text"
+      id="msgInput"
+      placeholder="Type a message..."
+      class="flex-1 p-2 rounded border border-purple-600 text-black focus:outline-none focus:ring-2 focus:ring-purple-800"
+    />
+    <button onclick="sendMessage()" class="bg-purple-700 hover:bg-purple-600 px-4 py-2 rounded font-semibold">
+      Send
+    </button>
+  </div>
+
+<script>
+  const socket = io();
+
+  const username = "<%= username %>"
+  const room = "<%= groupName %>"
+  const chatBox = document.getElementById('chatBox')
+
+  socket.emit('joinRoom', { room, username })
+
+  socket.on('message', ({ type, from, text }) => {
+    const msgDiv = document.createElement('div')
+
+    if(type === 'system') {
+      msgDiv.className = "text-center text-gray-400 italic text-sm"
+      msgDiv.textContent = text
+    } else if(from === username) {
+      msgDiv.className = "self-end bg-purple-700 text-white px-4 py-2 rounded-xl max-w-xs ml-auto";
+      msgDiv.textContent = `${from}: ${text}`;
+    } else {
+      msgDiv.className = "self-start bg-purple-900 text-white px-4 py-2 rounded-xl max-w-xs mr-auto";
+      msgDiv.textContent = `${from}: ${text}`;
+    }
+
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+
+  function sendMessage() {
+    const input = document.getElementById('msgInput');
+    const message = input.value.trim();
+    if(message) {
+      socket.emit('groupMessage', { room, from: username, text: message });
+      input.value = '';
+    }
+  }
+</script>
+
+</body>
+</html>

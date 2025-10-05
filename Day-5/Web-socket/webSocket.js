@@ -13,7 +13,6 @@
 // Feature	                     WebSockets	                            HTTP
 // Connection--	            single connection	               New connection per request
 // Communication--	    Bidirectional, full-duplex	           Unidirectional, request-response
-// Overhead--	        Minimal after handshake	               Headers with every request
 // Example--	        Chat apps, live feeds	               Loading web pages, form submissions
 
 

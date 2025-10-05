@@ -1,25 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Group Chat</title>
-  <script src="/socket.io/socket.io.js"></script>
-  <sc src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-900 text-white flex flex-col h-screen">
-
-  <div class="p-4 flex gap-2">
-    <input type="text" id="roomInput" placeholder="Room name" class="p-2 rounded text-black">
-    <button id="joinBtn" class="bg-purple-600 px-4 rounded">Join Room</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="bg-gradient-to-br from-black via-purple-950 to-black text-white font-sans flex flex-col items-center p-6 min-h-screen"
+  >
+   <div class="w-full max-w-6xl flex items-center">
+    <a href="/student/studentList" 
+     class="text-sm font-medium bg-purple-800 px-3 py-1 rounded hover:bg-black/50 transition">
+     Back to students
+  </a>
   </div>
+    <h1 class="text-3xl font-bold text-purple-400 mb-4"><%= otherUser.username %></h1>
+    <div id="chatBox" class="w-full max-w-2xl h-96 bg-black border border-purple-700 rounded-lg p-4 mb-4 overflow-y-auto flex flex-col gap-2"></div>
 
-  <div class="flex-1 overflow-auto p-4" id="chatBox"></div>
+    <div class="w-full max-w-2xl flex gap-2">
+      <input
+        type="text"
+        id="msgInput"
+        placeholder="Type a message..."
+        class="flex-1 p-2 rounded border border-purple-600 text-black focus:outline-none focus:ring-2 focus:ring-purple-800"/>
+      <button onclick="sendMessage()" class="bg-purple-700 hover:bg-purple-600 px-4 py-2 rounded font-semibold"> Send </button>
+    </div>
 
-  <form id="chatForm" class="flex p-4 bg-gray-800">
-    <input type="text" id="msgInput" class="flex-1 p-2 rounded text-black" placeholder="Type a message" autocomplete="off"/>
-    <button type="submit" class="ml-2 bg-purple-600 px-4 rounded">Send</button>
-  </form>
+    <script>
+      const chatBox = document.getElementById("chatBox");
+      const input = document.getElementById("msgInput");
+      const socket = io();  //This initializes the Socket.IO client and connects to the server. io() comes from the Socket.IO client library and establishes a WebSocket connection to the server
+      const room = "<%= roomName %>";
+      const username = "<%= currentUser.username %>";
 
-   
-</body>
+      socket.emit("joinPrivateRoom", room); //the client emits a joinRoom event to the server and sends the room name.
+
+      socket.on("singleMessage", ({ msg, from }) => {                //Listens for messages from the server
+        appendMessage(msg, from === username ? "self" : "other");//It compares from with the current user's username to decide how to style the message:"self" if the message is from the current user (right-aligned)."other" if from someone else (left-aligned).
+        chatBox.scrollTop = chatBox.scrollHeight;
+      })
+
+      function sendMessage() {
+  const msg = input.value.trim()
+  if (!msg) return
+  socket.emit("singleMessage", { msg, from: username, room }) //msg: the message content -> from: current user’s username, room: which chat room to send it to
+  input.value = ""  // Clears the input field afterward.
+}
+
+
+      function appendMessage(message, type) {
+        const p = document.createElement("p") //Dynamically creates a <p> element to display the message.
+        p.textContent = message;
+        p.className = `mb-1 px-2 py-1 rounded max-w-[70%] text-sm
+         ${type === "self"   //If the message is from "self", it's aligned to the right (ml-auto, self-end). If from "other", it's aligned to the left.
+            ? "bg-purple-700 text-white p-3 self-end ml-auto"
+            : "bg-purple-700 text-white p-3 self-start"
+          }`
+        chatBox.appendChild(p)
+      }
+    </script>
+  </body>
 </html>

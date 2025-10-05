@@ -1,37 +1,119 @@
-const { user, generateToken } = require("../utils/auth")
-const { NotFoundError } = require("../utils/error")
+const { generateAdminToken } = require("../utils/auth")
+const { UnAuthorized, NotFoundError } = require("../utils/error")
+const fs = require('fs')
+const path = require('path')
+const filePath = path.join(__dirname, '../utils/userList.json')
+const userList = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
+function writeFile() {
+  fs.writeFileSync(filePath, JSON.stringify(userList, null, 2))
+}
 
-const loginGet=(req,res)=>{
+
+//Login Page
+const loginGet = (req, res) => {
   res.render('login2')
 }
-
-const loginPost=(req,res,next)=>{
-  try{
-  const {username,password}=req.body
-  const student=user.find(u=>u.username===username && u.password===password)
-  if(student){
-    console.log(student)
-    res.cookie('Hiba',generateToken(student),{httpOnly:true,maxAge:3600000})
-    res.status(200).render('profile2',{
-      username:student.username,
-      age:student.age,
-      role:student.role,
-      id:student.id
-    })
-  }else{
-    return next(new NotFoundError('Invalid Username Or Password'))
+const loginPost = (req, res, next) => {
+  try {
+    const { username, password } = req.body
+    const admin = userList.find(u => u.username === username && u.password === password)
+    if (!admin) {
+      return next(new NotFoundError('No User Found'))
+    }
+    if (admin.role !== 'admin') {
+      return next(new UnAuthorized('The Role is Mismatched!'))
+    }
+    res.cookie('Admin_Token', generateAdminToken(admin), { httpOnly: true, maxAge: 3600000 })
+    res.redirect('/admin/profile2')      //redirect does not accept template as render does 
+  } catch (err) {
+    next(err)
   }
-}catch(err){
-   next(err)
-}
 }
 
-const profile2=(req,res)=>{
-  res.render('profile2')
+
+//Profile page
+const profile2 = (req, res) => {
+  res.render('profile2', {
+    username: req.user.username,
+    age: req.user.age,
+    email: req.user.email,
+    role: req.user.role,
+    id: req.user.id
+  })
 }
 
-const adminGet = (req, res) => {
-  res.render('adminPage',{message:''});
+
+//Files upload page
+const fileUpload = (req, res) => {
+  res.render('fileUpload', { message: '' })
 }
 
-module.exports = { adminGet,loginGet,loginPost,profile2}
+
+//Student List
+const studentList2 = (req, res) => {
+  const students = userList.filter((val) => val.role === 'student')
+  res.render('studentList2', { students })
+}
+
+
+//Add Student
+const addStudentGet = (req, res) => {
+  res.render('addStudent')
+}
+
+
+
+//Edit Student
+const editStudentGet = (req, res) => {
+  const studentId = parseInt(req.params.id)
+  const student = userList.find((u) => u.id === studentId)
+  res.render('editStudent', { student })
+}
+const editStudentPost = (req, res) => {
+  const studentId = parseInt(req.params.id)
+  const { username, age, email, role, course } = req.body
+  const student = userList.find((u) => u.id === studentId)
+  if (student) {
+    student.username = username
+    student.age = age
+    student.email = email
+    student.role = role
+    student.course = course
+  }
+  writeFile()
+  res.redirect('/admin/studentList2')
+}
+
+
+//Delete Student
+const deleteStudentPost = (req, res) => {
+
+  // const studentId = parseInt(req.params.id)
+  // userList=userList.filter((val)=>val.id!==studentId)
+  // res.redirect('/admin/studentList2')
+
+  const studentId = parseInt(req.params.id)  //params.id in url is string. so converting to integer
+  const index = userList.findIndex(s => s.id === studentId)
+  if (index !== -1) {
+    userList.splice(index, 1)   //array.splice(startIndex,deleteCount,item1,item2,...)
+    writeFile()
+  }
+  res.redirect('/admin/studentList2')
+}
+
+
+module.exports = { fileUpload, loginGet,filePath,userList,writeFile, loginPost, profile2, editStudentPost, addStudentGet, deleteStudentPost, studentList2, editStudentGet}
+
+
+
+
+
+
+
+
+//If we import userList like this:
+// const userList = require('../utils/userList');
+// Then userList is a mutable array. we can do-
+
+// if doing userList = userList.filter(...)
+//and If imported userList via destructuring (const { userList } = require(...)), we cannot reassign it bcz destructured objects are not mutable reference

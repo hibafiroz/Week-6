@@ -17,7 +17,7 @@
   <script>
       const messageDiv=document.getElementById('messageDiv')
       const input=document.getElementById('inp')
-      const socket=io()
+      const socket=io('/namespace')  //custom namespace
 
       function sendMsg(){
         const message=input.value.trim()

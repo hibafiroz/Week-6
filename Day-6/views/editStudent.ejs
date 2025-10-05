@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-purple-300 min-h-screen flex items-center gap-2 justify-center">
+    <form action="/admin/studentList2/editStudent/<%=student.id%>" method="POST" class="bg-gray-900 p-6 rounded shadow-md w-96">
+        <h1 class="text-2xl mb-4 text-purple-700 font-bold text-center">EDIT STUDENT</h1>
+        
+        <input type="text" name="username" placeholder="Name" value="<%= student.username %>" class="w-full p-2 mb-4 rounded bg-gray-800 text-white" required>
+        <input type="number" name="age" placeholder="Age" value="<%= student.age %>" class="w-full p-2 mb-4 rounded bg-gray-800 text-white" required>
+        <input type="email" name="email" placeholder="Email" value="<%= student.email%>" class="w-full p-2 mb-4 rounded bg-gray-800 text-white" required>
+        <input type="text" name="course" placeholder="Course" value="<%= student.course %>" class="w-full p-2 mb-4 rounded bg-gray-800 text-white" required>
+        
+        <button class="bg-purple-700 text-white hover:bg-purple-500 px-4 py-2 rounded w-full">Update Student</button>
+    </form>
+</body>
+</html>
