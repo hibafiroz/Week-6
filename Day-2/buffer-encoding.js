@@ -1,5 +1,5 @@
 //Buffer:
-// A buffer is a temporary storage area in memory used to handle binary data (like files, streams, images) efficiently.
+// A buffer is a temporary storage area in memory used to handle binary data (like files, streams, images).
 
 const buf = Buffer.from('Hello')
 console.log(buf);        //<Buffer 48 65 6c 6c 6f>

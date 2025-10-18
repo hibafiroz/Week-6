@@ -25,7 +25,7 @@ async function myFunction() {
 //  await keyword:
 
 // Used before a promise
-// It pauses the function until the promise is resolved or rejected
+// It pauses the function untill the promise is resolved or rejected
 //This makes asynchronous code look and behave like synchronous code
 
 //Real world example

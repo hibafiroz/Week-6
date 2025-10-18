@@ -6,27 +6,10 @@
 // WHERE DOES THIS STORE?
 //The server needs a place to keep session data. This can be:
 //Memory (default in express-session)
-//Data stored in RAM
-//Database (eX- MongoDB, MySQL)
+//1. Data stored in RAM
+//2. Database (eX- MongoDB, MySQL)
 //Another store (EX- Redis)
 
-//HOW TO CREATE?
-
-// Steps:
-// 1. Creates session data
-// When we use express-session it creates a session object for each user
-// Example: after login, we can store req.session.username = "Hiba"
-// This data is kept on the server
-
-// 2. Manage
-// express-session helps manage session lifecycle like
-// Saving session data
-// Updating session values
-// Destroying session on logout
-
-// 3. Automatically sets a session ID cookie
-// we dont need to manually create cookies
-// express-session will generate a unique session ID for each user
 
 //HOW TO USE?
 //app.use(session({ …options… }))

@@ -34,10 +34,8 @@
   <a 
     href="/student/groupChat/<%= encodeURIComponent(group.name.replace(/\s+/g, '')) %>" 
     class="flex items-center space-x-4 p-4 bg-purple-900 hover:bg-gradient-to-r from-purple-600 via-pink-500 to-purple-400 rounded-lg transition transform max-w-md w-full hover:scale-105 shadow-md"
-    aria-label="Chat with <%= group.name %>"
-    title="Start chat with <%= group.name %>"
   >
-\  <img 
+  <img 
       src="<%= group.image %>" 
       alt="<%= group.name %> profile" 
       class="w-12 h-12 rounded-full border-2 border-white object-cover"
@@ -46,8 +44,6 @@
   </a>
 <% }) %>
 </div>
-
   </div>
-
 </body>
 </html>

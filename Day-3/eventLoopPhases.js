@@ -22,7 +22,7 @@
 //setTimeout(,1000) does not guarantee it will run exactly after 1 second. bcz --
 //--the callback is placed in the Timers Phase queue after the delay, and runs when the event loop is free. If the loop is busy, it’ll be delayed even more
 
-
+ 
 
 //2. Pending callBack phase
 //Some async operations didnt finish in the right phase last time

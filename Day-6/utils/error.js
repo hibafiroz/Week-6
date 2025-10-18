@@ -23,4 +23,10 @@ class UnAuthorized extends AppError {
   }
 }
 
-module.exports = { AppError, NotFoundError, UnAuthorized, BadRequestError }
+class Duplicates extends AppError {
+  constructor(message) {
+    super(message,409)
+  }
+}
+
+module.exports = { AppError, NotFoundError, UnAuthorized, BadRequestError, Duplicates }

@@ -22,6 +22,7 @@ function generatestudentToken(student) {
 
 //Student Authentication Middleware
 const studentAuthMiddleware = (req, res, next) => {
+  console.log('entered')
   try {
     const token = req.cookies ?.Student_Token
     if (!token) {
@@ -29,12 +30,12 @@ const studentAuthMiddleware = (req, res, next) => {
     } else {
       const decoded = jwt.verify(token, secretKey)
       req.user = decoded; //storing logged in user details from token into the request
-      next();
+      next()
     }
   } catch (err) {
     next(err);
   }
-};
+}
 
 
 //Admin Toke Generation
@@ -64,6 +65,14 @@ const adminAuthMiddleware = (req, res, next) => {
   }
 }
 
+
+//Cache
+const preventCache= (req, res, next) => {
+  res.set('Cache-Control', 'no-store')
+  next();
+};
+
+
 //Student LogOut 
 const logoutStudentCookie = (req, res) => {
   res.clearCookie('Student_Token', {
@@ -83,4 +92,4 @@ const logoutAdminCookie = (req, res) => {
   res.redirect('/')
 }
 
-module.exports = {generateAdminToken, logoutAdminCookie, logoutStudentCookie, generatestudentToken, studentAuthMiddleware, adminAuthMiddleware}
+module.exports = {generateAdminToken, logoutAdminCookie, logoutStudentCookie, generatestudentToken, preventCache, studentAuthMiddleware, adminAuthMiddleware}

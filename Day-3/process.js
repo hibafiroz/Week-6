@@ -58,7 +58,6 @@ const name = args[0] || user; // Use CLI name or env name
 //4. Top-level code runs synchronously:
 //Synchronous code is executed directly on the js call stack
 //asynchronous code are handed over to the libuv
-//Thread pool — for CPU-bound or blocking tasks like file I/O(heavy tasks)
 
 //5. Event loop takes over:
 //Event loop phases

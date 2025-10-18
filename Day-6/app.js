@@ -8,11 +8,13 @@ const app = express()
 const userList=require('./utils/userList.json')
 const http = require("http")
 const { Server } = require("socket.io")
+const fs=require('fs')
 const { errorHandlingMiddleware } = require("./middleware/errorHandling")
 const { NotFoundError } = require("./utils/error")
 const { studentAuthMiddleware } = require("./utils/auth")
 const server = http.createServer(app)
-const io = new Server(server) //socket.io instance
+const io = new Server(server)
+const chatFilePath=path.join(__dirname,'/utils/chatHistory.json')
 
 const PORT = process.env.PORT
 
@@ -40,40 +42,106 @@ app.get('/student/chat/:currentUserId-:otherUserId',studentAuthMiddleware, (req,
 
   const currentUser = userList.find(u => u.id === currentUserId)
   const otherUser = userList.find(u => u.id === otherUserId)
+  const photo=otherUser.photo
 
   if (!currentUser || !otherUser) return next(new NotFoundError('Not Found'))
 
-  const roomName = [currentUser.id, otherUser.id].sort((a,b)=>a-b).join('_')
-  res.render('chat', { currentUser, otherUser, roomName })
+  const roomName = [currentUser.id, otherUser.id].sort((a, b) => a - b).join('_')
+  res.render('chat', { currentUser, otherUser, roomName, photo })
 })
-
 
 io.on("connection", socket => {
-  // Join a room group
-  socket.on("joinRoom", ({ room, username }) => {
+  socket.on("joinPrivateRoom", (room) => {
     socket.join(room);
-    socket.to(room).emit('message', { type: 'system', text: `${username} joined.` })
-  })
+     const allMessages = JSON.parse(fs.readFileSync(chatFilePath, 'utf-8'));
+    const roomMessages = allMessages.filter(msg => msg.kind === 'private' && msg.room === room);
+    roomMessages.forEach(msg => {
+      socket.emit('singleMessage', { from: msg.from, msg: msg.text });
+    });
+});
 
-  socket.on("joinPrivateRoom", ( room ) => {
-    socket.join(room)
-  })
 
-  // Group chat
-  socket.on("groupMessage", ({ room, from, text }) => {
-    io.to(room).emit('message', { from, text, type: 'user' })
-  })
+  // Join a group room
+  socket.on("joinRoom", ({ room, username }) => {
+    socket.data.username = username;
+    socket.data.room = room;
+    socket.join(room);
 
-  // Private chat
-  socket.on("singleMessage", ({ room, from, msg }) => {
-    io.to(room).emit('singleMessage', { from, msg })
-  })
+    // Read all messages
+    const allMessages = JSON.parse(fs.readFileSync(chatFilePath, 'utf-8'));
 
-  socket.on("disconnect", () => {
-    io.to(socket.room).emit('message', { type: 'system', text: `${socket.username} left.` });
-  }
-  )
-})
+    // system join message
+    const systemMsg = {
+      kind: 'group',
+      type: 'system',
+      room,
+      text: `${username} joined.`,
+      date: Date.now()
+    }
+    allMessages.push(systemMsg);
+    fs.writeFileSync(chatFilePath, JSON.stringify(allMessages, null, 2));
+
+    // Send previous group messages
+    const roomMessages = allMessages.filter(msg => msg.room === room && msg.kind === 'group');
+    roomMessages.forEach(msg => socket.emit('message', msg));
+    socket.to(room).emit('message', systemMsg);
+  });
+
+  // Group chats
+  socket.on("groupMessage", ({ room, from, fromPhoto, text }) => {
+    const allMessages = JSON.parse(fs.readFileSync(chatFilePath, 'utf-8'));
+    const newMsg = {
+      kind: 'group',
+      room,
+      from,
+      fromPhoto,
+      text,
+      date: Date.now()
+    };
+    allMessages.push(newMsg);
+    fs.writeFileSync(chatFilePath, JSON.stringify(allMessages, null, 2));
+
+    io.to(room).emit('message', { from, fromPhoto, text, type: 'user' });
+  });
+
+  // Private messages
+  socket.on("singleMessage", ({ msg, from, room }) => {
+    const allMessages = JSON.parse(fs.readFileSync(chatFilePath, 'utf-8'));
+    const newMsg = {
+      kind: 'private',
+      room,
+      from,
+      text: msg,
+      date: Date.now()
+    };
+    allMessages.push(newMsg);
+    fs.writeFileSync(chatFilePath, JSON.stringify(allMessages, null, 2));
+
+    io.to(room).emit('singleMessage', { from, msg });
+  });
+
+  // Disconnect
+  socket.on('disconnect', () => {
+    const username = socket.data.username;
+    const room = socket.data.room;
+
+    if (room && username) {
+      const allMessages = JSON.parse(fs.readFileSync(chatFilePath, 'utf-8'));
+      const systemMsg = {
+        kind: 'group',
+        type: 'system',
+        room,
+        text: `${username} left.`,
+        date: Date.now()
+      };
+      allMessages.push(systemMsg);
+      fs.writeFileSync(chatFilePath, JSON.stringify(allMessages, null, 2));
+
+      io.to(room).emit('message', systemMsg);
+    }
+  });
+});
+
 
 server.listen(PORT, () => {
   console.log(`http://localhost:${PORT}`)

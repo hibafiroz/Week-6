@@ -10,9 +10,9 @@ app.get('/test', (req, res, next) => {
         // Simulate an error
         throw new Error('Something went wrong!');
     } catch (err) {
-        next(err); // Pass error to central error handler
+        next(err) // Pass error to central error handler
     }
-});
+})
 
 //next(err) usage:
 //next(err) is used to pass an error to the central error-handling middleware
@@ -36,7 +36,6 @@ app.use((err, req, res, next) => {
 
 //in asynchronous-- if we throww err without try catch, it wont show any error in app until we go to that particular page where error threw. so from there, the app will crash over all
 //so this is why it is called runtime error
-//it cant handle with normal try catch bcs the callback executes later so it need .catch() or try catch inside async await
 
 // Unhandled Promise Rejection (just for async bcz promise itself async)
 //  A Promise is rejected but there’s no .catch() or try–catch to handle it

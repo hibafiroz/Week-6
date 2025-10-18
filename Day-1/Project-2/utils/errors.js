@@ -1,9 +1,9 @@
 //we can throw custom errors from anywhere without repeating logic
 
-class AppError extends Error{   //why Base class? instaed of checking instance of everything, we can jst check baseclass instance.
-    constructor(message,status){
-        super(message)          //super--inherit 'message' from built-in Error class
-        this.status=status    //add custom http status code
+class AppError extends Error{          //why Base class? instaed of checking instance of everything, we can jst check baseclass instance.
+    constructor(message,status){      //A constructor is just a special function inside a class that runs automatically when you create a new object from that class.
+        super(message)               //super--inherit 'message' from built-in Error class. Without super(message), our error won’t have message or stack, and it won’t behave like a real JavaScript error.
+        this.status=status          //add custom http status code
     }
 }
 //bcz notFoundError and BadRequestError both extend AppError they are both considered instances of AppError

@@ -44,7 +44,7 @@ xxxxx.yyyyy.zzzzz
 // Claims can be:
 
 // a. Registered claims (standard ones):
-// these are predefined keys that are recommended by JWT specification
+// these are predefined keys`
 // iss- Issuer (who issued the token)
 // sub- Subject (the user the token refers to)
 // exp- Expiration time

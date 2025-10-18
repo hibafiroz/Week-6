@@ -1,19 +1,28 @@
 const { generatestudentToken } = require("../utils/auth")
-const {UnAuthorized, NotFoundError} = require("../utils/error")
+const { UnAuthorized, NotFoundError } = require("../utils/error")
+const dotenv=require('dotenv').config()
 const fs = require('fs')
 const path = require('path')
 const filePath = path.join(__dirname, '../utils/userList.json')
 const userList = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
+const jwt=require('jsonwebtoken')
+const secretKey = process.env.secretKey
 
 
 //Login Page
 const loginGet = (req, res) => {
-    res.render('login')
+    const token = req.cookies.Student_Token
+    if (token) {
+        try {
+            jwt.verify(token, secretKey)
+            return res.redirect('/student/profile')
+        } catch (err) {
+            console.log("JWT error:", err.message)
+        }
+    }
+    res.render('login');
 }
 
-// function cookieName() {
-//     return `Student_Token_${}`
-// }
 const loginPost = (req, res, next) => {
     try{
         const { username, password } = req.body
@@ -34,7 +43,6 @@ const loginPost = (req, res, next) => {
 
 //Profile Page
 const profile = (req, res) => {  
-    console.log(req.user.photo)
     res.render('profile', {
         username: req.user.username,
         age: req.user.age,
@@ -53,17 +61,11 @@ const studentList = (req, res) => {
   const students = userList.filter(u => u.role === 'student');
 
   res.render('studentList', {
-      studentList: students,
+      students,
       photo:currentUser.photo,
       currentUser
   });
 };
-
-
-//chat
-const chat = (req, res) => {
-    res.render('chat')
-}
 
 const groups = [
   { name: 'The Scholars Circle', image: '/images/groupChat2.jpeg' },
@@ -76,16 +78,41 @@ const groups = [
 //Group List
 const groupList = (req, res) => {
     const photo=req.user.photo
-    res.render('groupList', {groups,photo})
+    res.render('groupList', { groups, photo })
 }
 
 
 //Group Chat
 const groupChat = (req, res) => {
     const username = req.user.username
+    const photo=req.user.photo
     const groupName = req.params.groupName
-    const photo = req.user.photo
-    res.render('groupChat', { username, groupName,photo })
+    const group = groups.find((p) => p.name.replace(/\s+/g, '')===groupName)
+    const groupPhoto=group.image
+    res.render('groupChat', { username, groupName, groupPhoto, photo })
 }
 
-module.exports = { loginGet, loginPost, profile, studentList , chat, groupList, groupChat }
+const editStudent2Get = (req, res) => {
+    console.log('entered')
+    const studentID = parseInt(req.user.id)
+    const student = userList.find((u => u.id === studentID))
+    console.log(req.user)
+    res.render('editStudent2', {student})
+}
+
+const editStudent2Post = (req, res) => {
+    const { username, age, email, course } = req.body
+    const student = userList.find((u) => u.username === req.user.username)
+    
+    if(student){
+        student.username=username,
+        student.age=age,
+        student.email=email,
+        student.course=course
+    }
+    fs.writeFileSync(filePath,JSON.stringify(userList,null,2))
+    res.redirect('/student/profile')
+}
+
+
+module.exports = { loginGet, loginPost, profile, studentList , groupList, groupChat,editStudent2Get,editStudent2Post }
