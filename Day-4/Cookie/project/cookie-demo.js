@@ -8,7 +8,7 @@ server.use(cookieParser());
 // Fake login (normally you'd check DB)
 server.get("/login", (req, res) => {
   // set a cookie with username
-  res.cookie("username", "Hiba", { httpOnly: true, maxAge: 60000 }); // 1 min
+  res.cookie("username", "Hiba", { httpOnly: true, maxAge: 60000,secure:true }); // 1 min
   res.send("You are logged in as Hiba!");
 });
 

@@ -43,7 +43,7 @@ const loginPost = (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
+}
 
 //Profile page
 const profile2 = (req, res) => {
@@ -104,6 +104,15 @@ const deleteStudentPost = (req, res) => {
 };
 
 
+//Admin LogOut
+const logoutAdminCookie = (req, res) => {
+  res.clearCookie('Admin_Token', {
+    httpOnly: true,
+    sameSite: 'Strict'
+  })
+  res.redirect('/')
+}
+
 
 module.exports = {
   fileUpload,
@@ -118,6 +127,7 @@ module.exports = {
   deleteStudentPost,
   studentList2,
   editStudentGet,
+  logoutAdminCookie
 };
 
 //If we import userList like this:

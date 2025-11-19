@@ -1,5 +1,5 @@
 // session helps the server remember who a user is
-// The server creates a session object and gives the client a session ID (often kept inside a cookie). 
+// The server creates a session object and gives the client a session ID (often kept inside a cookie).
 // On each request, the browser sends this session ID, and the server looks up the session data
 // Sessions are more secure and can store larger, sensitive information such as login state or shopping cart data
 
@@ -59,3 +59,29 @@
 //Security Concerns:
 //If session IDs are stolen, attackers can hijack the session until it expires
 //Longer session lifetimes increase risk.
+
+
+// JWT vs express-session:
+
+//JWT:
+// Used in MERN stack, mobile apps.
+// JWT is stateless, meaning the server does not store any user data.Instead, the user’s information is stored inside a signed token that the client keeps and sends with every request.
+// This makes JWT perfect for MERN applications, mobile apps, and APIs, because it is fast, scalable, and works across different platforms.
+// However, logout is harder with JWT because the server cannot directly “destroy” a token; it remains valid until it expires.
+
+//session:
+// Express - Session is stateful, meaning the server stores user session data and the browser only keeps a small session ID cookie.
+// This makes logout and session handling very easy because the server can destroy the session anytime.
+// Express - Session is ideal for traditional web apps
+
+
+// | Feature                       |   JWT                                        |   Express-Session (Cookie Session)                  |
+// | ----------------------------- | -------------------------------------------- | --------------------------------------------------- |
+// |   Where user data is stored   | Inside the   token   (client-side)           | Inside **server memory/database**                   |
+// |   How authentication works    | Client sends token every request             | Server checks session ID stored on server           |
+// |   Scalability                 |   Very good (no server memory needed)        |   Hard when many users (server must store sessions) |
+// |   Security                    | Good (if signed & using httpOnly cookies)    | Good (server controls data)                         |
+// |   Logout                      | Hard (token remains valid until expiry)      | Easy (delete session from server)                   |
+// |   Best for                    | APIs, mobile apps, MERN stack, microservices | Traditional websites, dashboards                    |
+// |   State                       |   Stateless   (server stores nothing)        |   Stateful   (server stores session data)           |
+// |   Speed                       | Fast                                         | Slightly slower                                     |

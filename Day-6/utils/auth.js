@@ -72,24 +72,4 @@ const preventCache= (req, res, next) => {
   next();
 };
 
-
-//Student LogOut 
-const logoutStudentCookie = (req, res) => {
-  res.clearCookie('Student_Token', {
-    httpOnly: true,
-    sameSite: 'Strict',
-  })
-  res.redirect('/')
-}
-
-
-//Admin LogOut
-const logoutAdminCookie = (req, res) => {
-  res.clearCookie('Admin_Token', {
-    httpOnly: true,
-    sameSite: 'Strict'
-  })
-  res.redirect('/')
-}
-
-module.exports = {generateAdminToken, logoutAdminCookie, logoutStudentCookie, generatestudentToken, preventCache, studentAuthMiddleware, adminAuthMiddleware}
+module.exports = {generateAdminToken, generatestudentToken, preventCache, studentAuthMiddleware, adminAuthMiddleware}

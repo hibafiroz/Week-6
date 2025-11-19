@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket.IO Group Chat</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body class="bg-black text-orange-500 flex flex-col items-center h-screen">
+
+  <h1 class="text-3xl font-bold text-orange-400 mt-6">Socket.IO Demo</h1>
+
+  <!-- CHAT MESSAGES -->
+  <div id="messageDiv"
+       class="bg-neutral-950 border-2 border-orange-600 rounded-lg w-4/5 max-w-2xl h-3/5 overflow-y-auto p-4 mt-6 shadow-lg shadow-orange-500/30">
+  </div>
+
+  <!-- INPUT AREA -->
+  <div class="flex w-4/5 max-w-2xl mt-4">
+    <input id="msgInput"
+           class="flex-1 p-3 border-2 border-orange-600 rounded-l-md bg-neutral-950 text-orange-200 placeholder-orange-400"
+           placeholder="Type your message..." />
+    <button id="sendBtn" class="bg-orange-600 hover:bg-orange-500 px-6 py-3 rounded-r-md text-white">Send</button>
+  </div>
+
+<script>
+  // EJS-injected values (from server)
+  const username = "<%= username %>";
+  const room = "<%= groupName %>";
+
+  const socket = io();
+
+  const messageDiv = document.getElementById('messageDiv');
+  const msgInput = document.getElementById('msgInput');
+  const sendBtn = document.getElementById('sendBtn');
+
+  // Join room after connection
+  socket.on('connect', () => {
+    console.log('Socket connected:', socket.id);
+    socket.emit('joinRoom', { room, username });
+  });
+
+  // Listen for messages
+  socket.on('message', (msg) => {
+    const msgDiv = document.createElement('div');
+
+    if (msg.type === "system") {
+      // System messages are centered & italic
+      msgDiv.className = "text-center text-gray-400 italic text-sm my-1";
+      msgDiv.textContent = msg.text;
+    } else if (msg.from) {
+      // My messages
+      msgDiv.className = "bg-orange-500 text-white px-4 py-2 rounded-lg max-w-20 ml-auto"
+      msgDiv.textContent = msg.text;
+    }
+
+    messageDiv.appendChild(msgDiv);
+    messageDiv.scrollTop = messageDiv.scrollHeight; // auto scroll
+  });
+
+  // Send message
+  function sendMessage() {
+    const text = msgInput.value.trim();
+    if (!text) return;
+    socket.emit("groupMessage", { room, from: username, text });
+    msgInput.value = "";
+  }
+
+  //Enter key
+  sendBtn.addEventListener('click', sendMessage);
+  msgInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
+</script>
+
+</body>
+</html>

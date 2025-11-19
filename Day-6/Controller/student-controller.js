@@ -92,6 +92,13 @@ const groupChat = (req, res) => {
     res.render('groupChat', { username, groupName, groupPhoto, photo })
 }
 
+const studentPage=(req, res) => {
+    const data = fs.readFileSync(filePath, 'utf-8')
+    const files = JSON.parse(data)
+    const uploadTime=Date.now()
+    res.render('studentPage', { files, uploadTime })
+}
+
 const editStudent2Get = (req, res) => {
     console.log('entered')
     const studentID = parseInt(req.user.id)
@@ -114,5 +121,13 @@ const editStudent2Post = (req, res) => {
     res.redirect('/student/profile')
 }
 
+//Student LogOut 
+const logoutStudentCookie = (req, res) => {
+  res.clearCookie('Student_Token', {
+    httpOnly: true,
+    sameSite: 'Strict',
+  })
+  res.redirect('/')
+}
 
-module.exports = { loginGet, loginPost, profile, studentList , groupList, groupChat,editStudent2Get,editStudent2Post }
+module.exports = { loginGet, loginPost, profile, studentList , groupList, groupChat, studentPage, editStudent2Get, editStudent2Post, logoutStudentCookie }

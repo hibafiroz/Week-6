@@ -160,7 +160,7 @@ app.use(cookieParser());
 // We use res.cookie(name, value, options)
 
 app.get("/set-cookie", (req, res) => {
-  res.cookie("username", "Hiba", { maxAge: 60000 }); // expires in 1 minute
+  res.cookie("username", "Hiba", { maxAge: 60000, secure:true }); // expires in 1 minute
   res.send("Cookie has been set!");
 });
 //now Visiting http://localhost:3000/set-cookie,  browser will now save a cookie: username=Hiba.

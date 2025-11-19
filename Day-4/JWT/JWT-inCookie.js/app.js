@@ -1,14 +1,15 @@
 const express=require('express')
 const bodyParser=require('body-parser')
 const jwt=require('jsonwebtoken')
-const cookie=require('cookie-parser')
-
+const cookie = require('cookie-parser')
+const dotenv = require('dotenv').config()
+const PORT=process.env.PORT
+const secretKey=process.env.secretKey
 const app=express()
-const secretKey='hibaSecretKey'
 
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json())
-app.use(cookie());
+app.use(cookie())
 
 const user={id:25,username:'hiba',password:'12345'}
 const payload={id:user.id, name:user.username}
@@ -53,4 +54,11 @@ app.get('/profile',authMiddleware,(req,res)=>{
   res.json({message:`Welcome ${req.user.name}`,user:req.user})
 })
 
-app.listen(3000,()=>{console.log('http://localhost:3000/login')})
+//logout functionality
+app.get('/logout', (req, res) => {
+  res.clearCookie('Hiba') // removes JWT from browser
+  res.redirect('/login')
+})
+
+
+app.listen(`${PORT},()=>{console.log('http://localhost:3000/login')}`)

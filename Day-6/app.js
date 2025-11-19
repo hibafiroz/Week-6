@@ -5,6 +5,11 @@ const cookieParser = require("cookie-parser")
 const studentRoute = require("./Routes/student-route")
 const adminRoute = require("./Routes/admin-route")
 const app = express()
+const helmet = require("helmet");
+const cors = require("cors");
+const compression = require("compression");
+const rateLimit = require("express-rate-limit");
+const morgan = require("morgan");
 const userList=require('./utils/userList.json')
 const http = require("http")
 const { Server } = require("socket.io")
@@ -22,9 +27,22 @@ app.use(express.static(path.join(__dirname, "public")))
 app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "views"))
 
+app.use(helmet())
+app.use(compression())
+app.use(morgan("dev"));
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100,                 // limit each IP
+    message: "Too many requests from this IP, try again later."
+});
+app.use(limiter)
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+}))
 
 app.use("/student", studentRoute)
 app.use("/admin", adminRoute)
@@ -32,8 +50,6 @@ app.use("/admin", adminRoute)
 app.get("/", (req, res) => {
   res.render("home",{ query: req.query })
 })
-
-app.use(errorHandlingMiddleware)
 
 
 app.get('/student/chat/:currentUserId-:otherUserId',studentAuthMiddleware, (req, res, next) => {
@@ -142,6 +158,8 @@ io.on("connection", socket => {
   });
 });
 
+
+app.use(errorHandlingMiddleware)
 
 server.listen(PORT, () => {
   console.log(`http://localhost:${PORT}`)
